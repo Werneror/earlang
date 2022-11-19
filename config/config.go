@@ -35,8 +35,8 @@ var WordListFile = "words.txt"
 var WordLearnedFile = "learned.txt"
 var WordProgressFile = "progress.txt"
 var WordSelectMode = WordSelectModeOrder
-var WordReadMode = WordReadModeOnce
-var WordReadAutoInterval = 4
+var WordReadMode = WordReadModeAuto
+var WordReadAutoInterval = 2
 
 func init() {
 	// Determine the base directory
