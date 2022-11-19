@@ -37,6 +37,7 @@ var WordProgressFile = "progress.txt"
 var WordSelectMode = WordSelectModeOrder
 var WordReadMode = WordReadModeAuto
 var WordReadAutoInterval = 2
+var WordShow = false
 
 func init() {
 	// Determine the base directory
@@ -76,6 +77,7 @@ func init() {
 	viper.SetDefault("word.select_mode", WordSelectMode)
 	viper.SetDefault("word.read_mode", WordReadMode)
 	viper.SetDefault("word.read_auto_interval", WordReadAutoInterval)
+	viper.SetDefault("word.show", WordShow)
 
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Errorf("failed to read config: %v", err)
@@ -107,6 +109,7 @@ func init() {
 	WordSelectMode = viper.GetString("word.select_mode")
 	WordReadMode = viper.GetString("word.read_mode")
 	WordReadAutoInterval = viper.GetInt("word.read_auto_interval")
+	WordShow = viper.GetBool("word.show")
 
 	// log
 	level, err := logrus.ParseLevel(LogLevel)

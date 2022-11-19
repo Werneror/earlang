@@ -14,6 +14,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/data/binding"
 	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
@@ -25,7 +26,8 @@ type MainWindow struct {
 	window      fyne.Window
 	imagesGrid  *fyne.Container
 	list        *word.List
-	word        string
+	word        binding.String
+	wordWidget  fyne.Widget
 	wordLock    sync.RWMutex
 	preloadLock sync.Mutex
 }
@@ -35,17 +37,23 @@ func (m *MainWindow) showError(err error) {
 }
 
 func (m *MainWindow) getWord() string {
-	var w string
 	m.wordLock.RLock()
-	w = m.word
 	defer m.wordLock.RUnlock()
+	w, err := m.word.Get()
+	if err != nil {
+		m.showError(err)
+		w = ""
+	}
 	return w
 }
 
 func (m *MainWindow) setWord(w string) {
 	m.wordLock.Lock()
-	m.word = w
 	m.wordLock.Unlock()
+	err := m.word.Set(w)
+	if err != nil {
+		m.showError(err)
+	}
 }
 
 func (m *MainWindow) readWord() {
@@ -109,6 +117,11 @@ func (m *MainWindow) autoReadWord() {
 }
 
 func (m *MainWindow) showWord() {
+	if config.WordShow {
+		m.wordWidget.Show()
+	} else {
+		m.wordWidget.Hide()
+	}
 	m.showImages()
 	if config.WordReadMode == config.WordReadModeOnce {
 		m.readWord()
@@ -173,10 +186,11 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 		window:      app.NewWindow("EarLang"),
 		imagesGrid:  container.New(layout.NewGridLayout(config.PicNumPerLine)),
 		list:        word.NewList(),
-		word:        "",
+		word:        binding.NewString(),
 		wordLock:    sync.RWMutex{},
 		preloadLock: sync.Mutex{},
 	}
+	mainWindow.wordWidget = widget.NewLabelWithData(mainWindow.word)
 	go mainWindow.autoReadWord()
 
 	exists := mainWindow.currentWord()
@@ -195,7 +209,11 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 	nextButton := widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
 		mainWindow.next()
 	})
-	controlGrid := container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, readButton, nextButton))
+
+	bottomBox := container.New(layout.NewVBoxLayout(),
+		container.New(layout.NewCenterLayout(), mainWindow.wordWidget),
+		container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, readButton, nextButton)),
+	)
 
 	toolbar := widget.NewToolbar(
 		widget.NewToolbarSpacer(),
@@ -213,7 +231,7 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 		}),
 	)
 
-	mainGrid := container.New(layout.NewBorderLayout(toolbar, controlGrid, nil, nil), toolbar, controlGrid, mainWindow.imagesGrid)
+	mainGrid := container.New(layout.NewBorderLayout(toolbar, bottomBox, nil, nil), toolbar, bottomBox, mainWindow.imagesGrid)
 
 	mainWindow.window.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
 		switch event.Name {
@@ -223,6 +241,8 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 			mainWindow.read()
 		case "Right", "D", "N":
 			mainWindow.next()
+		case "C":
+			mainWindow.window.Clipboard().SetContent(mainWindow.getWord())
 		}
 	})
 

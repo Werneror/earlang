@@ -50,6 +50,9 @@ func newSettingWindow(app fyne.App) *settingWindow {
 	readAutoIntervalSelect := widget.NewSelect([]string{"1", "2", "3", "4", "5", "10"}, func(string) {})
 	readAutoIntervalSelect.SetSelected(fmt.Sprintf("%d", config.WordReadAutoInterval))
 
+	showWordCheck := widget.NewCheck("show word below the pictures", func(bool) {})
+	showWordCheck.SetChecked(config.WordShow)
+
 	form := &widget.Form{
 		Items: []*widget.FormItem{
 			{Text: "log level", Widget: logLevelSelect},
@@ -60,6 +63,7 @@ func newSettingWindow(app fyne.App) *settingWindow {
 			{Text: "word read mode", Widget: readModeSelect},
 			{Text: "word auto read interval(s)", Widget: readAutoIntervalSelect},
 			{Text: "word select mode", Widget: wordSelectModeSelect},
+			{Text: "show word", Widget: showWordCheck},
 		},
 		OnSubmit: func() {
 			picNumber, err := strconv.Atoi(picNumberSelect.Selected)
@@ -88,6 +92,8 @@ func newSettingWindow(app fyne.App) *settingWindow {
 			viper.Set("word.read_auto_interval", config.WordReadAutoInterval)
 			config.WordSelectMode = wordSelectModeSelect.Selected
 			viper.Set("word.select_mode", config.WordSelectMode)
+			config.WordShow = showWordCheck.Checked
+			viper.Set("word.show", config.WordShow)
 			if err := viper.WriteConfig(); err != nil {
 				logrus.Errorf("failed to update config file: %v", err)
 			}
