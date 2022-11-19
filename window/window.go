@@ -210,8 +210,10 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 		mainWindow.next()
 	})
 
+	// Empty string label keeps box height unchanged when word is hidden
+	wordBox := container.New(layout.NewHBoxLayout(), widget.NewLabel(""), mainWindow.wordWidget, widget.NewLabel(""))
 	bottomBox := container.New(layout.NewVBoxLayout(),
-		container.New(layout.NewCenterLayout(), mainWindow.wordWidget),
+		container.New(layout.NewCenterLayout(), wordBox),
 		container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, readButton, nextButton)),
 	)
 
