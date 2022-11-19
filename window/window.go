@@ -224,7 +224,7 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 			}
 		}),
 		widget.NewToolbarAction(theme.SettingsIcon(), func() {
-			newSettingWindow(app).Show()
+			newSettingWindow(app, mainWindow).Show()
 		}),
 		widget.NewToolbarAction(theme.InfoIcon(), func() {
 			newAboutWindow(app, version).Show()

@@ -13,7 +13,8 @@ import (
 )
 
 type settingWindow struct {
-	window fyne.Window
+	window     fyne.Window
+	mainWindow *MainWindow
 }
 
 func (s *settingWindow) Show() {
@@ -21,9 +22,10 @@ func (s *settingWindow) Show() {
 	s.window.Show()
 }
 
-func newSettingWindow(app fyne.App) *settingWindow {
+func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	s := &settingWindow{
-		window: app.NewWindow("EarLang Setting"),
+		window:     app.NewWindow("EarLang Setting"),
+		mainWindow: mainWindow,
 	}
 
 	logLevelSelect := widget.NewSelect([]string{"debug", "info", "warning", "error"}, func(string) {})
@@ -66,10 +68,14 @@ func newSettingWindow(app fyne.App) *settingWindow {
 			{Text: "show word", Widget: showWordCheck},
 		},
 		OnSubmit: func() {
+			needReload := false
 			picNumber, err := strconv.Atoi(picNumberSelect.Selected)
 			if err != nil {
 				logrus.Error("failed to parse picture total number %s: %v", picNumberSelect.Selected, err)
 				picNumber = config.PicTotalNumber
+			}
+			if picNumber != config.PicTotalNumber {
+				needReload = true
 			}
 			readAutoInterval, err := strconv.Atoi(readAutoIntervalSelect.Selected)
 			if err != nil {
@@ -92,10 +98,16 @@ func newSettingWindow(app fyne.App) *settingWindow {
 			viper.Set("word.read_auto_interval", config.WordReadAutoInterval)
 			config.WordSelectMode = wordSelectModeSelect.Selected
 			viper.Set("word.select_mode", config.WordSelectMode)
+			if showWordCheck.Checked != config.WordShow {
+				needReload = true
+			}
 			config.WordShow = showWordCheck.Checked
 			viper.Set("word.show", config.WordShow)
 			if err := viper.WriteConfig(); err != nil {
 				logrus.Errorf("failed to update config file: %v", err)
+			}
+			if needReload {
+				mainWindow.showWord()
 			}
 			s.window.Close()
 		},
