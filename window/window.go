@@ -140,6 +140,30 @@ func (m *MainWindow) currentWord() bool {
 	return exists
 }
 
+func (m *MainWindow) prev() {
+	logrus.Debug("click prev")
+	exists := m.prevWord()
+	if exists {
+		m.showWord()
+	}
+	logrus.Debug("finish prev")
+}
+
+func (m *MainWindow) read() {
+	logrus.Debug("click read")
+	m.readWord()
+	logrus.Debug("finish read")
+}
+
+func (m *MainWindow) next() {
+	logrus.Debug("click next")
+	exists := m.nextWord()
+	if exists {
+		m.showWord()
+	}
+	logrus.Debug("finish next")
+}
+
 func (m *MainWindow) ShowAndRun() {
 	m.window.ShowAndRun()
 }
@@ -163,25 +187,13 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 	}
 
 	prevButton := widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {
-		logrus.Debug("click prev")
-		exists := mainWindow.prevWord()
-		if exists {
-			mainWindow.showWord()
-		}
-		logrus.Debug("finish prev")
+		mainWindow.prev()
 	})
 	readButton := widget.NewButtonWithIcon("", theme.VolumeUpIcon(), func() {
-		logrus.Debug("click read")
-		mainWindow.readWord()
-		logrus.Debug("finish read")
+		mainWindow.read()
 	})
 	nextButton := widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
-		logrus.Debug("click next")
-		exists := mainWindow.nextWord()
-		if exists {
-			mainWindow.showWord()
-		}
-		logrus.Debug("finish next")
+		mainWindow.next()
 	})
 	controlGrid := container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, readButton, nextButton))
 
@@ -202,6 +214,17 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 	)
 
 	mainGrid := container.New(layout.NewBorderLayout(toolbar, controlGrid, nil, nil), toolbar, controlGrid, mainWindow.imagesGrid)
+
+	mainWindow.window.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
+		switch event.Name {
+		case "Left", "A", "P":
+			mainWindow.prev()
+		case "Up", "Down", "W", "S", "R":
+			mainWindow.read()
+		case "Right", "D", "N":
+			mainWindow.next()
+		}
+	})
 
 	mainWindow.window.SetContent(mainGrid)
 	mainWindow.window.SetIcon(resource.EarIcoe)
