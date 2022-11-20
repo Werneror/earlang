@@ -239,12 +239,12 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 		switch event.Name {
 		case "Left", "A", "P":
 			mainWindow.prev()
-		case "Up", "Down", "W", "S", "R":
-			mainWindow.read()
+		case "Up", "W", "C":
+			mainWindow.window.Clipboard().SetContent(mainWindow.getWord())
 		case "Right", "D", "N":
 			mainWindow.next()
-		case "C":
-			mainWindow.window.Clipboard().SetContent(mainWindow.getWord())
+		case "Down", "S", "R":
+			mainWindow.read()
 		}
 	})
 
