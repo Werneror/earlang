@@ -103,7 +103,7 @@ func (l *List) loadLearnedWords() {
 
 func (l *List) loadWordList() {
 	if _, err := os.Stat(l.wordListFile); os.IsNotExist(err) {
-		l.wordList = top1500nouns
+		l.wordList = nouns
 		logrus.Infof("%s not exist, use built-in dictionary", l.wordListFile)
 		err = SaveWordsToFile(l.wordListFile, l.wordList)
 		if err != nil {
