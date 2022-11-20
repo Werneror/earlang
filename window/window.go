@@ -23,13 +23,15 @@ import (
 )
 
 type MainWindow struct {
-	window      fyne.Window
-	imagesGrid  *fyne.Container
-	list        *word.List
-	word        binding.String
-	wordWidget  fyne.Widget
-	wordLock    sync.RWMutex
-	preloadLock sync.Mutex
+	window        fyne.Window
+	imagesGrid    *fyne.Container
+	list          *word.List
+	word          binding.String
+	wordWidget    fyne.Widget
+	wordLock      sync.RWMutex
+	preloadLock   sync.Mutex
+	readButton    *widget.Button
+	autoReadPause bool
 }
 
 func (m *MainWindow) showError(err error) {
@@ -99,7 +101,7 @@ func (m *MainWindow) preload() {
 
 func (m *MainWindow) autoReadWord() {
 	for {
-		if config.WordReadMode == config.WordReadModeAuto {
+		if config.WordReadMode == config.WordReadModeAuto && !m.autoReadPause {
 			w := m.getWord()
 			if w != "" {
 				err := pronunciation.ReadOneWord(w)
@@ -164,8 +166,26 @@ func (m *MainWindow) prev() {
 
 func (m *MainWindow) read() {
 	logrus.Debug("click read")
-	m.readWord()
+	if config.WordReadMode == config.WordReadModeAuto {
+		m.autoReadPause = !m.autoReadPause
+		m.updateReadButtonIcon()
+	} else {
+		m.readWord()
+	}
 	logrus.Debug("finish read")
+}
+
+func (m *MainWindow) updateReadButtonIcon() {
+	if config.WordReadMode == config.WordReadModeAuto {
+		if m.autoReadPause {
+			m.readButton.SetIcon(theme.MediaPlayIcon())
+		} else {
+			m.readButton.SetIcon(theme.MediaPauseIcon())
+		}
+	} else {
+		m.readButton.SetIcon(theme.VolumeUpIcon())
+	}
+	m.readButton.Refresh()
 }
 
 func (m *MainWindow) next() {
@@ -183,38 +203,32 @@ func (m *MainWindow) ShowAndRun() {
 
 func NewMainWindow(app fyne.App, version string) *MainWindow {
 	mainWindow := &MainWindow{
-		window:      app.NewWindow("EarLang"),
-		imagesGrid:  container.New(layout.NewGridLayout(config.PicNumPerLine)),
-		list:        word.NewList(),
-		word:        binding.NewString(),
-		wordLock:    sync.RWMutex{},
-		preloadLock: sync.Mutex{},
+		window:        app.NewWindow("EarLang"),
+		imagesGrid:    container.New(layout.NewGridLayout(config.PicNumPerLine)),
+		list:          word.NewList(),
+		word:          binding.NewString(),
+		wordLock:      sync.RWMutex{},
+		preloadLock:   sync.Mutex{},
+		autoReadPause: false,
 	}
-	mainWindow.wordWidget = widget.NewLabelWithData(mainWindow.word)
 	go mainWindow.autoReadWord()
-
-	exists := mainWindow.currentWord()
-	if !exists {
-		mainWindow.showError(fmt.Errorf("failed to load the word to learn"))
-	} else {
-		mainWindow.showWord()
-	}
 
 	prevButton := widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {
 		mainWindow.prev()
 	})
-	readButton := widget.NewButtonWithIcon("", theme.VolumeUpIcon(), func() {
+	mainWindow.readButton = widget.NewButtonWithIcon("", theme.VolumeUpIcon(), func() {
 		mainWindow.read()
 	})
 	nextButton := widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
 		mainWindow.next()
 	})
 
+	mainWindow.wordWidget = widget.NewLabelWithData(mainWindow.word)
 	// Empty string label keeps box height unchanged when word is hidden
 	wordBox := container.New(layout.NewHBoxLayout(), widget.NewLabel(""), mainWindow.wordWidget, widget.NewLabel(""))
 	bottomBox := container.New(layout.NewVBoxLayout(),
 		container.New(layout.NewCenterLayout(), wordBox),
-		container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, readButton, nextButton)),
+		container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, mainWindow.readButton, nextButton)),
 	)
 
 	toolbar := widget.NewToolbar(
@@ -247,6 +261,14 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 			mainWindow.read()
 		}
 	})
+
+	exists := mainWindow.currentWord()
+	if !exists {
+		mainWindow.showError(fmt.Errorf("failed to load the word to learn"))
+	} else {
+		mainWindow.showWord()
+	}
+	mainWindow.updateReadButtonIcon()
 
 	mainWindow.window.SetContent(mainGrid)
 	mainWindow.window.SetIcon(resource.EarIcoe)

@@ -69,6 +69,20 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 		},
 		OnSubmit: func() {
 			needReload := false
+			needUpdateReadButtonIcon := false
+
+			config.LogLevel = logLevelSelect.Selected
+			viper.Set("log.level", config.LogLevel)
+
+			config.PronPicker = pronPickerSelect.Selected
+			viper.Set("pronunciation.picker", config.PronPicker)
+
+			config.PronRegion = pronRegionSelect.Selected
+			viper.Set("pronunciation.region", config.PronRegion)
+
+			config.PicPicker = picPickerSelect.Selected
+			viper.Set("picture.picker", config.PicPicker)
+
 			picNumber, err := strconv.Atoi(picNumberSelect.Selected)
 			if err != nil {
 				logrus.Error("failed to parse picture total number %s: %v", picNumberSelect.Selected, err)
@@ -77,34 +91,39 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			if picNumber != config.PicTotalNumber {
 				needReload = true
 			}
+			config.PicTotalNumber = picNumber
+			viper.Set("picture.total_number", config.PicTotalNumber)
+
+			if config.WordReadMode != readModeSelect.Selected {
+				needUpdateReadButtonIcon = true
+			}
+			config.WordReadMode = readModeSelect.Selected
+			viper.Set("word.read_mode", config.WordReadMode)
+
 			readAutoInterval, err := strconv.Atoi(readAutoIntervalSelect.Selected)
 			if err != nil {
 				logrus.Error("failed to parse word read auto interval %s: %v", readAutoIntervalSelect.Selected, err)
 				readAutoInterval = config.WordReadAutoInterval
 			}
-			config.LogLevel = logLevelSelect.Selected
-			viper.Set("log.level", config.LogLevel)
-			config.PronPicker = pronPickerSelect.Selected
-			viper.Set("pronunciation.picker", config.PronPicker)
-			config.PronRegion = pronRegionSelect.Selected
-			viper.Set("pronunciation.region", config.PronRegion)
-			config.PicPicker = picPickerSelect.Selected
-			viper.Set("picture.picker", config.PicPicker)
-			config.PicTotalNumber = picNumber
-			viper.Set("picture.total_number", config.PicTotalNumber)
-			config.WordReadMode = readModeSelect.Selected
-			viper.Set("word.read_mode", config.WordReadMode)
 			config.WordReadAutoInterval = readAutoInterval
 			viper.Set("word.read_auto_interval", config.WordReadAutoInterval)
+
 			config.WordSelectMode = wordSelectModeSelect.Selected
 			viper.Set("word.select_mode", config.WordSelectMode)
+
 			if showWordCheck.Checked != config.WordShow {
 				needReload = true
 			}
+
 			config.WordShow = showWordCheck.Checked
 			viper.Set("word.show", config.WordShow)
+
 			if err := viper.WriteConfig(); err != nil {
 				logrus.Errorf("failed to update config file: %v", err)
+			}
+
+			if needUpdateReadButtonIcon {
+				mainWindow.updateReadButtonIcon()
 			}
 			if needReload {
 				mainWindow.showWord()
