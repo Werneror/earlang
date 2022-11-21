@@ -34,7 +34,7 @@ const (
 var WordListFile = "words.txt"
 var WordLearnedFile = "learned.txt"
 var WordProgressFile = "progress.txt"
-var WordSelectMode = WordSelectModeOrder
+var WordSelectMode = WordSelectModeRandom
 var WordReadMode = WordReadModeAuto
 var WordReadAutoInterval = 2
 var WordShow = false
