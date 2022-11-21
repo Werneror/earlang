@@ -2,6 +2,7 @@ package word
 
 import (
 	"earlang/config"
+	"earlang/word/builtin"
 	"math/rand"
 	"os"
 	"path"
@@ -103,7 +104,7 @@ func (l *List) loadLearnedWords() {
 
 func (l *List) loadWordList() {
 	if _, err := os.Stat(l.wordListFile); os.IsNotExist(err) {
-		l.wordList = nouns
+		l.wordList = builtin.Tools01
 		logrus.Infof("%s not exist, use built-in dictionary", l.wordListFile)
 		err = SaveWordsToFile(l.wordListFile, l.wordList)
 		if err != nil {
