@@ -198,6 +198,7 @@ func (m *MainWindow) next() {
 }
 
 func (m *MainWindow) ShowAndRun() {
+	m.window.RequestFocus()
 	m.window.ShowAndRun()
 }
 
