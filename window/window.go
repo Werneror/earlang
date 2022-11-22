@@ -203,9 +203,13 @@ func (m *MainWindow) ShowAndRun() {
 }
 
 func NewMainWindow(app fyne.App, version string) *MainWindow {
+	picNumPerLine := config.PicNumPerLine
+	if picNumPerLine > config.PicTotalNumber {
+		picNumPerLine = config.PicTotalNumber
+	}
 	mainWindow := &MainWindow{
 		window:        app.NewWindow("EarLang"),
-		imagesGrid:    container.New(layout.NewGridLayout(config.PicNumPerLine)),
+		imagesGrid:    container.New(layout.NewGridLayout(picNumPerLine)),
 		list:          word.NewList(),
 		word:          binding.NewString(),
 		wordLock:      sync.RWMutex{},
