@@ -79,7 +79,12 @@ func (l *List) NextWord() (bool, string) {
 	if l.pointer.getValue() < len(l.learnedWords) {
 		return true, l.learnedWords[l.pointer.getValue()]
 	}
-	return l.PickWord()
+	exists, word := l.PickWord()
+	if !exists {
+		l.pointer.minusOne()
+		return false, ""
+	}
+	return true, word
 }
 
 func (l *List) PrevWord() (bool, string) {
