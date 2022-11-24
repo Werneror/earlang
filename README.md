@@ -1,4 +1,4 @@
-# EarLang
+# EarLang - 耳语
 
 用耳朵学习英语单词。
 
