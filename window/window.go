@@ -31,6 +31,7 @@ type MainWindow struct {
 	englishWidget fyne.Widget
 	chinese       binding.String
 	chineseWidget fyne.Widget
+	bottomBox     *fyne.Container
 	wordLock      sync.RWMutex
 	preloadLock   sync.Mutex
 	readButton    *widget.Button
@@ -146,6 +147,34 @@ func (m *MainWindow) showWord() {
 	m.processBar.Max = float64(t)
 	m.processBar.SetValue(float64(p))
 	go m.preload()
+}
+
+func (m *MainWindow) tempShowEnglish() {
+	if m.englishWidget.Visible() {
+		return
+	}
+	m.englishWidget.Show()
+	m.bottomBox.Refresh()
+	go func() {
+		time.Sleep(2 * time.Second)
+		if !config.WordEnglishShow {
+			m.englishWidget.Hide()
+		}
+	}()
+}
+
+func (m *MainWindow) tempShowChinese() {
+	if m.chineseWidget.Visible() {
+		return
+	}
+	m.chineseWidget.Show()
+	m.bottomBox.Refresh()
+	go func() {
+		time.Sleep(2 * time.Second)
+		if !config.WordChineseShow {
+			m.chineseWidget.Hide()
+		}
+	}()
 }
 
 func (m *MainWindow) nextWord() bool {
@@ -276,7 +305,7 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 		return fmt.Sprintf("%.0f of %.0f", mainWindow.processBar.Value, mainWindow.processBar.Max)
 	}
 
-	bottomBox := container.New(layout.NewVBoxLayout(),
+	mainWindow.bottomBox = container.New(layout.NewVBoxLayout(),
 		container.New(layout.NewCenterLayout(), wordBox),
 		container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, mainWindow.readButton, nextButton)),
 		mainWindow.processBar,
@@ -302,18 +331,25 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 		}),
 	)
 
-	mainGrid := container.New(layout.NewBorderLayout(toolbar, bottomBox, nil, nil), toolbar, bottomBox, mainWindow.imagesGrid)
+	mainGrid := container.New(
+		layout.NewBorderLayout(toolbar, mainWindow.bottomBox, nil, nil),
+		toolbar, mainWindow.bottomBox, mainWindow.imagesGrid,
+	)
 
 	mainWindow.window.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
 		switch event.Name {
-		case "Left", "A", "P":
+		case "Left", "A":
 			mainWindow.prev()
-		case "Up", "W", "C":
+		case "Up", "W":
 			mainWindow.window.Clipboard().SetContent(mainWindow.getWord())
-		case "Right", "D", "N":
+		case "Right", "D":
 			mainWindow.next()
-		case "Down", "S", "R":
+		case "Down", "S":
 			mainWindow.read()
+		case "E":
+			mainWindow.tempShowEnglish()
+		case "C":
+			mainWindow.tempShowChinese()
 		}
 	})
 
