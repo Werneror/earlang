@@ -152,10 +152,17 @@ func NewList() (*List, error) {
 		_ = os.MkdirAll(wordDir, os.ModePerm)
 	}
 
+	var groupFile string
+	if filepath.IsAbs(config.GroupFile) {
+		groupFile = config.GroupFile
+	} else {
+		groupFile = filepath.Join(config.BaseDir, config.GroupFile)
+	}
+
 	l := &List{
 		groupType:        config.GroupType,
 		groupName:        groupName,
-		groupFile:        filepath.Join(wordDir, fmt.Sprintf("%s_%s", groupName, config.GroupFile)),
+		groupFile:        groupFile,
 		learnedWordsFile: filepath.Join(wordDir, fmt.Sprintf("%s_%s", groupName, config.WordLearnedFile)),
 		pointer:          newPointer(filepath.Join(wordDir, fmt.Sprintf("%s_%s", groupName, config.WordProgressFile))),
 	}
