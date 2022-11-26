@@ -197,6 +197,16 @@ func (m *MainWindow) next() {
 	logrus.Debug("finish next")
 }
 
+func (m *MainWindow) reset() {
+	m.list.Reset()
+	exists := m.currentWord()
+	if !exists {
+		m.showError(fmt.Errorf("failed to load the word to learn"))
+	} else {
+		m.showWord()
+	}
+}
+
 func (m *MainWindow) ShowAndRun() {
 	m.window.RequestFocus()
 	m.window.ShowAndRun()
@@ -238,6 +248,10 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 
 	toolbar := widget.NewToolbar(
 		widget.NewToolbarSpacer(),
+		widget.NewToolbarAction(theme.ViewRefreshIcon(), func() {
+			mainWindow.reset()
+		}),
+		widget.NewToolbarSeparator(),
 		widget.NewToolbarAction(theme.FolderOpenIcon(), func() {
 			err := exec.Command(`explorer.exe`, config.BaseDir).Start()
 			if err != nil {

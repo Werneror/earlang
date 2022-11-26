@@ -95,6 +95,11 @@ func (l *List) PrevWord() (bool, string) {
 	return false, ""
 }
 
+func (l *List) Reset() {
+	l.pointer.setValue(0)
+	l.learnedWords = []string{}
+}
+
 func (l *List) loadLearnedWords() {
 	if _, err := os.Stat(l.WordLearnedFile); os.IsNotExist(err) {
 		l.learnedWords = []string{}
