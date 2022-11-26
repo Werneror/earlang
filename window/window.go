@@ -31,6 +31,7 @@ type MainWindow struct {
 	wordLock      sync.RWMutex
 	preloadLock   sync.Mutex
 	readButton    *widget.Button
+	processBar    *widget.ProgressBar
 	autoReadPause bool
 }
 
@@ -128,6 +129,10 @@ func (m *MainWindow) showWord() {
 	if config.WordReadMode == config.WordReadModeOnce {
 		m.readWord()
 	}
+	p, t := m.list.Progress()
+	m.processBar.Min = 0
+	m.processBar.Max = float64(t)
+	m.processBar.SetValue(float64(p))
 	go m.preload()
 }
 
@@ -241,9 +246,16 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 	mainWindow.wordWidget = widget.NewLabelWithData(mainWindow.word)
 	// Empty string label keeps box height unchanged when word is hidden
 	wordBox := container.New(layout.NewHBoxLayout(), widget.NewLabel(""), mainWindow.wordWidget, widget.NewLabel(""))
+
+	mainWindow.processBar = widget.NewProgressBar()
+	mainWindow.processBar.TextFormatter = func() string {
+		return fmt.Sprintf("%.0f of %.0f", mainWindow.processBar.Value, mainWindow.processBar.Max)
+	}
+
 	bottomBox := container.New(layout.NewVBoxLayout(),
 		container.New(layout.NewCenterLayout(), wordBox),
 		container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, mainWindow.readButton, nextButton)),
+		mainWindow.processBar,
 	)
 
 	toolbar := widget.NewToolbar(

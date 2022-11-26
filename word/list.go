@@ -100,6 +100,10 @@ func (l *List) Reset() {
 	l.learnedWords = []string{}
 }
 
+func (l *List) Progress() (int, int) {
+	return l.pointer.getValue() + 1, len(l.wordList)
+}
+
 func (l *List) loadLearnedWords() {
 	if _, err := os.Stat(l.WordLearnedFile); os.IsNotExist(err) {
 		l.learnedWords = []string{}
