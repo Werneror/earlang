@@ -8,7 +8,7 @@ import (
 var version = "0.0.2"
 
 func main() {
-	earlang := app.New()
+	earlang := app.NewWithID("wiki.werner.earlang")
 	mainWindow := window.NewMainWindow(earlang, version)
 	mainWindow.ShowAndRun()
 }

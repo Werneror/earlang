@@ -67,5 +67,5 @@ $ cd earlang
 5. 打包可执行文件
 
 ```
-$ fyne package -name earlang -icon resource\ear.ico --appID wiki.werner.earlang --release
+$ fyne package --release
 ```
