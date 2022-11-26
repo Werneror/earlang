@@ -6,6 +6,7 @@ require (
 	fyne.io/fyne/v2 v2.2.4
 	github.com/PuerkitoBio/goquery v1.8.0
 	github.com/faiface/beep v1.1.0
+	github.com/flopp/go-findfont v0.1.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.14.0
 	github.com/stretchr/testify v1.8.1

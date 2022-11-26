@@ -67,8 +67,11 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	readAutoIntervalSelect := widget.NewSelect([]string{"1", "2", "3", "4", "5", "10"}, func(string) {})
 	readAutoIntervalSelect.SetSelected(fmt.Sprintf("%d", config.WordReadAutoInterval))
 
-	showWordCheck := widget.NewCheck("show word below the pictures", func(bool) {})
-	showWordCheck.SetChecked(config.WordShow)
+	showEnglishCheck := widget.NewCheck("show word below the pictures", func(bool) {})
+	showEnglishCheck.SetChecked(config.WordEnglishShow)
+
+	showChineseCheck := widget.NewCheck("show Chinese below the pictures", func(bool) {})
+	showChineseCheck.SetChecked(config.WordChineseShow)
 
 	form := &widget.Form{
 		Items: []*widget.FormItem{
@@ -83,7 +86,8 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			{Text: "word read mode", Widget: readModeSelect},
 			{Text: "word auto read interval(s)", Widget: readAutoIntervalSelect},
 			{Text: "word select mode", Widget: wordSelectModeSelect},
-			{Text: "show word", Widget: showWordCheck},
+			{Text: "show word", Widget: showEnglishCheck},
+			{Text: "show Chinese", Widget: showChineseCheck},
 		},
 		OnSubmit: func() {
 			needUpdateList := true
@@ -148,12 +152,17 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			config.WordSelectMode = wordSelectModeSelect.Selected
 			viper.Set("word.select_mode", config.WordSelectMode)
 
-			if showWordCheck.Checked != config.WordShow {
+			if showEnglishCheck.Checked != config.WordEnglishShow {
 				needUpdateWord = true
 			}
+			config.WordEnglishShow = showEnglishCheck.Checked
+			viper.Set("word.show_english", config.WordEnglishShow)
 
-			config.WordShow = showWordCheck.Checked
-			viper.Set("word.show", config.WordShow)
+			if showChineseCheck.Checked != config.WordChineseShow {
+				needUpdateWord = true
+			}
+			config.WordChineseShow = showChineseCheck.Checked
+			viper.Set("word.show_chinese", config.WordChineseShow)
 
 			if err := viper.WriteConfig(); err != nil {
 				logrus.Errorf("failed to update config file: %v", err)

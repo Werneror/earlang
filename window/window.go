@@ -6,6 +6,7 @@ import (
 	"earlang/pronunciation"
 	"earlang/resource"
 	"earlang/word"
+	"earlang/word/group"
 	"fmt"
 	"os/exec"
 	"sync"
@@ -26,8 +27,10 @@ type MainWindow struct {
 	window        fyne.Window
 	imagesGrid    *fyne.Container
 	list          *word.List
-	word          binding.String
-	wordWidget    fyne.Widget
+	english       binding.String
+	englishWidget fyne.Widget
+	chinese       binding.String
+	chineseWidget fyne.Widget
 	wordLock      sync.RWMutex
 	preloadLock   sync.Mutex
 	readButton    *widget.Button
@@ -42,7 +45,7 @@ func (m *MainWindow) showError(err error) {
 func (m *MainWindow) getWord() string {
 	m.wordLock.RLock()
 	defer m.wordLock.RUnlock()
-	w, err := m.word.Get()
+	w, err := m.english.Get()
 	if err != nil {
 		m.showError(err)
 		w = ""
@@ -50,10 +53,14 @@ func (m *MainWindow) getWord() string {
 	return w
 }
 
-func (m *MainWindow) setWord(w string) {
+func (m *MainWindow) setWord(w group.Word) {
 	m.wordLock.Lock()
 	m.wordLock.Unlock()
-	err := m.word.Set(w)
+	err := m.english.Set(w.English)
+	if err != nil {
+		m.showError(err)
+	}
+	err = m.chinese.Set(w.Chinese)
 	if err != nil {
 		m.showError(err)
 	}
@@ -120,10 +127,15 @@ func (m *MainWindow) autoReadWord() {
 }
 
 func (m *MainWindow) showWord() {
-	if config.WordShow {
-		m.wordWidget.Show()
+	if config.WordEnglishShow {
+		m.englishWidget.Show()
 	} else {
-		m.wordWidget.Hide()
+		m.englishWidget.Hide()
+	}
+	if config.WordChineseShow {
+		m.chineseWidget.Show()
+	} else {
+		m.chineseWidget.Hide()
 	}
 	m.showImages()
 	if config.WordReadMode == config.WordReadModeOnce {
@@ -139,7 +151,7 @@ func (m *MainWindow) showWord() {
 func (m *MainWindow) nextWord() bool {
 	exists, newWord := m.list.NextWord()
 	if exists {
-		m.setWord(newWord.English)
+		m.setWord(newWord)
 	}
 	return exists
 }
@@ -147,7 +159,7 @@ func (m *MainWindow) nextWord() bool {
 func (m *MainWindow) prevWord() bool {
 	exists, newWord := m.list.PrevWord()
 	if exists {
-		m.setWord(newWord.English)
+		m.setWord(newWord)
 	}
 	return exists
 }
@@ -155,7 +167,7 @@ func (m *MainWindow) prevWord() bool {
 func (m *MainWindow) currentWord() bool {
 	exists, newWord := m.list.CurrentWord()
 	if exists {
-		m.setWord(newWord.English)
+		m.setWord(newWord)
 	}
 	return exists
 }
@@ -235,7 +247,8 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 	mainWindow := &MainWindow{
 		window:        app.NewWindow("EarLang"),
 		imagesGrid:    container.New(layout.NewGridLayout(picNumPerLine)),
-		word:          binding.NewString(),
+		english:       binding.NewString(),
+		chinese:       binding.NewString(),
 		wordLock:      sync.RWMutex{},
 		preloadLock:   sync.Mutex{},
 		autoReadPause: false,
@@ -251,9 +264,12 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 		mainWindow.next()
 	})
 
-	mainWindow.wordWidget = widget.NewLabelWithData(mainWindow.word)
+	mainWindow.englishWidget = widget.NewLabelWithData(mainWindow.english)
+	mainWindow.chineseWidget = widget.NewLabelWithData(mainWindow.chinese)
 	// Empty string label keeps box height unchanged when word is hidden
-	wordBox := container.New(layout.NewHBoxLayout(), widget.NewLabel(""), mainWindow.wordWidget, widget.NewLabel(""))
+	wordBox := container.New(layout.NewHBoxLayout(),
+		widget.NewLabel(""), mainWindow.englishWidget, mainWindow.chineseWidget, widget.NewLabel(""),
+	)
 
 	mainWindow.processBar = widget.NewProgressBar()
 	mainWindow.processBar.TextFormatter = func() string {
