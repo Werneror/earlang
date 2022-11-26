@@ -4,7 +4,6 @@ import (
 	"earlang/common"
 	"earlang/config"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -38,9 +37,9 @@ func init() {
 }
 
 func WordPictures(word string, number int) ([]string, error) {
-	picDirPath := path.Join(picBaseDir, config.PicPicker, fmt.Sprintf("%s_%d", word, number))
+	picDirPath := path.Join(picBaseDir, config.PicPicker, word)
 
-	dir, err := ioutil.ReadDir(picDirPath)
+	dir, err := os.ReadDir(picDirPath)
 	if err == nil {
 		paths := make([]string, 0, number)
 		for _, f := range dir {
