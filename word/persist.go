@@ -6,8 +6,6 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	"github.com/sirupsen/logrus"
 )
 
 func LoadWordsFromFile(filePath string) ([]group.Word, error) {
@@ -22,10 +20,13 @@ func LoadWordsFromFile(filePath string) ([]group.Word, error) {
 			continue
 		}
 		pieces := strings.SplitN(w, ",", 2)
-		if len(pieces) != 2 {
-			logrus.Warnf("invalid word %s from %s", w, filePath)
+		newWord := group.Word{
+			English: pieces[0],
 		}
-		words = append(words, group.Word{English: pieces[0], Chinese: pieces[1]})
+		if len(pieces) > 1 {
+			newWord.Chinese = pieces[1]
+		}
+		words = append(words, newWord)
 	}
 	return words, nil
 }
