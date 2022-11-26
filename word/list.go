@@ -2,10 +2,11 @@ package word
 
 import (
 	"earlang/config"
-	"earlang/word/builtin"
+	"earlang/word/group"
+	"fmt"
 	"math/rand"
 	"os"
-	"path"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -13,20 +14,22 @@ import (
 )
 
 type List struct {
-	wordListFile     string
-	WordLearnedFile  string
+	groupType        string
+	groupName        string
+	groupFile        string
+	group            group.Group
 	pointer          *pointer
-	wordList         []string
-	learnedWords     []string
+	learnedWordsFile string
+	learnedWords     []group.Word
 	learnedWordsLock sync.Mutex
 }
 
-func (l *List) PickWord() (bool, string) {
-	var unlearned []string
-	for _, w := range l.wordList {
+func (l *List) PickWord() (bool, group.Word) {
+	var unlearned []group.Word
+	for _, w := range l.group.Words {
 		found := false
 		for _, l := range l.learnedWords {
-			if w == l {
+			if w.English == l.English {
 				found = true
 				break
 			}
@@ -39,7 +42,7 @@ func (l *List) PickWord() (bool, string) {
 		}
 	}
 	if len(unlearned) == 0 {
-		return false, ""
+		return false, group.Word{}
 	}
 	index := 0
 	if config.WordSelectMode != config.WordSelectModeOrder {
@@ -49,7 +52,7 @@ func (l *List) PickWord() (bool, string) {
 	l.learnedWordsLock.Lock()
 	l.learnedWords = append(l.learnedWords, w)
 	l.learnedWordsLock.Unlock()
-	err := SaveWordsToFile(l.WordLearnedFile, l.learnedWords)
+	err := SaveWordsToFile(l.learnedWordsFile, l.learnedWords)
 	if err != nil {
 		logrus.Errorf("failed to save learned word to file: %v", err)
 	}
@@ -60,7 +63,7 @@ func (l *List) Verge() bool {
 	return l.pointer.getValue() >= len(l.learnedWords)-2
 }
 
-func (l *List) CurrentWord() (bool, string) {
+func (l *List) CurrentWord() (bool, group.Word) {
 	if l.pointer.getValue() < 0 {
 		l.pointer.setValue(0)
 	}
@@ -74,7 +77,7 @@ func (l *List) CurrentWord() (bool, string) {
 	return true, l.learnedWords[l.pointer.getValue()]
 }
 
-func (l *List) NextWord() (bool, string) {
+func (l *List) NextWord() (bool, group.Word) {
 	l.pointer.addOne()
 	if l.pointer.getValue() < len(l.learnedWords) {
 		return true, l.learnedWords[l.pointer.getValue()]
@@ -82,66 +85,86 @@ func (l *List) NextWord() (bool, string) {
 	exists, word := l.PickWord()
 	if !exists {
 		l.pointer.minusOne()
-		return false, ""
+		return false, group.Word{}
 	}
 	return true, word
 }
 
-func (l *List) PrevWord() (bool, string) {
+func (l *List) PrevWord() (bool, group.Word) {
 	l.pointer.minusOne()
 	if l.pointer.getValue() < len(l.learnedWords) {
 		return true, l.learnedWords[l.pointer.getValue()]
 	}
-	return false, ""
+	return false, group.Word{}
 }
 
 func (l *List) Reset() {
 	l.pointer.setValue(0)
-	l.learnedWords = []string{}
+	l.learnedWords = []group.Word{}
 }
 
 func (l *List) Progress() (int, int) {
-	return l.pointer.getValue() + 1, len(l.wordList)
+	return l.pointer.getValue() + 1, len(l.group.Words)
 }
 
 func (l *List) loadLearnedWords() {
-	if _, err := os.Stat(l.WordLearnedFile); os.IsNotExist(err) {
-		l.learnedWords = []string{}
+	if _, err := os.Stat(l.learnedWordsFile); os.IsNotExist(err) {
+		l.learnedWords = []group.Word{}
 	} else {
-		l.learnedWords, err = LoadWordsFromFile(l.WordLearnedFile)
+		l.learnedWords, err = LoadWordsFromFile(l.learnedWordsFile)
 		if err != nil {
-			logrus.Errorf("failed to load learned words from file %s: %v", l.WordLearnedFile, err)
-			l.learnedWords = []string{}
+			logrus.Errorf("failed to load learned words from file %s: %v", l.learnedWordsFile, err)
+			l.learnedWords = []group.Word{}
 		}
 	}
 }
 
-func (l *List) loadWordList() {
-	if _, err := os.Stat(l.wordListFile); os.IsNotExist(err) {
-		l.wordList = builtin.Tools01
-		logrus.Infof("%s not exist, use built-in dictionary", l.wordListFile)
-		err = SaveWordsToFile(l.wordListFile, l.wordList)
-		if err != nil {
-			logrus.Errorf("failed to save word list fo file %s: %v", l.wordListFile, err)
+func (l *List) loadWordList() error {
+	if l.groupType == config.WordGroupTypeBuiltin {
+		for _, g := range group.Groups {
+			if g.Name == l.groupName {
+				l.group = g
+				return nil
+			}
 		}
+		return fmt.Errorf("invalid word group name: %s", l.groupName)
 	} else {
-		l.wordList, err = LoadWordsFromFile(l.wordListFile)
+		words, err := LoadWordsFromFile(l.groupFile)
 		if err != nil {
-			logrus.Errorf("failed to load word list from file %s: %v", l.wordListFile, err)
-			l.wordList = []string{}
+			return fmt.Errorf("failed to load word group from file %s: %w", l.groupType, err)
+		}
+		l.group = group.Group{
+			Name:  l.groupName,
+			Words: words,
 		}
 	}
+	return nil
 }
 
-func NewList() *List {
+func NewList() (*List, error) {
+	groupName := config.GroupName
+	if config.GroupType == config.WordGroupTypeCustom {
+		groupName = "custom"
+	}
+
+	wordDir := filepath.Join(config.BaseDir, "word")
+	if _, err := os.Stat(wordDir); os.IsNotExist(err) {
+		_ = os.MkdirAll(wordDir, os.ModePerm)
+	}
+
 	l := &List{
-		wordListFile:    path.Join(config.BaseDir, config.WordListFile),
-		WordLearnedFile: path.Join(config.BaseDir, config.WordLearnedFile),
-		pointer:         newPointer(path.Join(config.BaseDir, config.WordProgressFile)),
+		groupType:        config.GroupType,
+		groupName:        groupName,
+		groupFile:        filepath.Join(wordDir, fmt.Sprintf("%s_%s", groupName, config.GroupFile)),
+		learnedWordsFile: filepath.Join(wordDir, fmt.Sprintf("%s_%s", groupName, config.WordLearnedFile)),
+		pointer:          newPointer(filepath.Join(wordDir, fmt.Sprintf("%s_%s", groupName, config.WordProgressFile))),
 	}
-	l.loadWordList()
+	err := l.loadWordList()
+	if err != nil {
+		return nil, err
+	}
 	l.loadLearnedWords()
-	return l
+	return l, nil
 }
 
 func init() {

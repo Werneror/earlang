@@ -1,0 +1,31 @@
+package group
+
+var Body02 = Group{
+	Name: "body 02",
+	Words: []Word{
+		{English: "wrist", Chinese: "手腕"},
+		{English: "finger", Chinese: "手指"},
+		{English: "nail", Chinese: "指甲"},
+		{English: "thumb", Chinese: "大拇指"},
+		{English: "forefinger", Chinese: "食指"},
+		{English: "fist", Chinese: "拳头"},
+		{English: "backbone", Chinese: "脊骨，脊柱"},
+		{English: "collarbone", Chinese: "锁骨"},
+		{English: "breastbone", Chinese: "胸骨"},
+		{English: "heart", Chinese: "心脏"},
+		{English: "lung", Chinese: "肺"},
+		{English: "abdomen", Chinese: "腹部"},
+		{English: "belly", Chinese: "肚子"},
+		{English: "stomach", Chinese: "胃"},
+		{English: "back", Chinese: "背"},
+		{English: "waist", Chinese: "腰"},
+		{English: "pelvis", Chinese: "骨盆"},
+		{English: "buttocks", Chinese: "屁股"},
+		{English: "leg", Chinese: "腿"},
+		{English: "thigh", Chinese: "大腿"},
+		{English: "knee", Chinese: "膝盖"},
+		{English: "ankle", Chinese: "脚踝"},
+		{English: "foot", Chinese: "脚"},
+		{English: "toes", Chinese: "脚趾"},
+	},
+}

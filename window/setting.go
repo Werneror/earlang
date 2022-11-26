@@ -3,6 +3,7 @@ package window
 import (
 	"earlang/config"
 	"earlang/resource"
+	"earlang/word/group"
 	"fmt"
 	"strconv"
 
@@ -43,6 +44,20 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	picNumberSelect := widget.NewSelect([]string{"5", "10", "15"}, func(string) {})
 	picNumberSelect.SetSelected(fmt.Sprintf("%d", config.PicTotalNumber))
 
+	groupTypeSelect := widget.NewSelect([]string{config.WordGroupTypeBuiltin, config.WordGroupTypeCustom}, func(s string) {})
+	groupTypeSelect.SetSelected(config.GroupType)
+
+	groupNames := make([]string, 0, len(group.Groups))
+	for _, g := range group.Groups {
+		groupNames = append(groupNames, g.Name)
+	}
+	groupNameSelect := widget.NewSelect(groupNames, func(s string) {})
+	groupNameSelect.SetSelected(config.GroupName)
+
+	// TODO: use dialog.FileDialog
+	groupFileEntry := widget.NewEntry()
+	groupFileEntry.SetText(config.GroupFile)
+
 	readModeSelect := widget.NewSelect([]string{config.WordReadModeAuto, config.WordReadModeOnce, config.WordReadModeManual}, func(string) {})
 	readModeSelect.SetSelected(config.WordReadMode)
 
@@ -62,13 +77,17 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			{Text: "pronunciation region", Widget: pronRegionSelect},
 			{Text: "picture source", Widget: picPickerSelect},
 			{Text: "picture number", Widget: picNumberSelect},
+			{Text: "word group type", Widget: groupTypeSelect},
+			{Text: "builtin group name", Widget: groupNameSelect},
+			{Text: "custom group file", Widget: groupFileEntry},
 			{Text: "word read mode", Widget: readModeSelect},
 			{Text: "word auto read interval(s)", Widget: readAutoIntervalSelect},
 			{Text: "word select mode", Widget: wordSelectModeSelect},
 			{Text: "show word", Widget: showWordCheck},
 		},
 		OnSubmit: func() {
-			needReload := false
+			needUpdateList := true
+			needUpdateWord := false
 			needUpdateReadButtonIcon := false
 
 			config.LogLevel = logLevelSelect.Selected
@@ -89,10 +108,28 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 				picNumber = config.PicTotalNumber
 			}
 			if picNumber != config.PicTotalNumber {
-				needReload = true
+				needUpdateWord = true
 			}
 			config.PicTotalNumber = picNumber
 			viper.Set("picture.total_number", config.PicTotalNumber)
+
+			if config.GroupType != groupTypeSelect.Selected {
+				needUpdateList = true
+			}
+			config.GroupType = groupTypeSelect.Selected
+			viper.Set("word.group_type", config.GroupType)
+
+			if config.GroupType == config.WordGroupTypeBuiltin && config.GroupName != groupNameSelect.Selected {
+				needUpdateList = true
+			}
+			config.GroupName = groupNameSelect.Selected
+			viper.Set("word.group_name", config.GroupName)
+
+			if config.GroupType == config.WordGroupTypeCustom && config.GroupFile != groupFileEntry.Text {
+				needUpdateList = true
+			}
+			config.GroupFile = groupFileEntry.Text
+			viper.Set("word.group_file", config.GroupFile)
 
 			if config.WordReadMode != readModeSelect.Selected {
 				needUpdateReadButtonIcon = true
@@ -112,7 +149,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			viper.Set("word.select_mode", config.WordSelectMode)
 
 			if showWordCheck.Checked != config.WordShow {
-				needReload = true
+				needUpdateWord = true
 			}
 
 			config.WordShow = showWordCheck.Checked
@@ -122,11 +159,19 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 				logrus.Errorf("failed to update config file: %v", err)
 			}
 
+			if needUpdateList {
+				err := mainWindow.UpdateList()
+				if err != nil {
+					mainWindow.showError(err)
+				}
+				mainWindow.currentWord()
+				needUpdateWord = true
+			}
+			if needUpdateWord {
+				mainWindow.showWord()
+			}
 			if needUpdateReadButtonIcon {
 				mainWindow.updateReadButtonIcon()
-			}
-			if needReload {
-				mainWindow.showWord()
 			}
 			s.window.Close()
 		},

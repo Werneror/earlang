@@ -94,8 +94,8 @@ func (m *MainWindow) preload() {
 		m.preloadLock.Lock()
 		defer m.preloadLock.Unlock()
 		logrus.Debugf("start preload %s", newWord)
-		_, _ = pronunciation.WordPron(newWord, config.PronRegion)
-		_, _ = picture.WordPictures(newWord, config.PicTotalNumber)
+		_, _ = pronunciation.WordPron(newWord.English, config.PronRegion)
+		_, _ = picture.WordPictures(newWord.English, config.PicTotalNumber)
 		logrus.Debugf("finish preload %s", newWord)
 	}
 }
@@ -139,7 +139,7 @@ func (m *MainWindow) showWord() {
 func (m *MainWindow) nextWord() bool {
 	exists, newWord := m.list.NextWord()
 	if exists {
-		m.setWord(newWord)
+		m.setWord(newWord.English)
 	}
 	return exists
 }
@@ -147,7 +147,7 @@ func (m *MainWindow) nextWord() bool {
 func (m *MainWindow) prevWord() bool {
 	exists, newWord := m.list.PrevWord()
 	if exists {
-		m.setWord(newWord)
+		m.setWord(newWord.English)
 	}
 	return exists
 }
@@ -155,7 +155,7 @@ func (m *MainWindow) prevWord() bool {
 func (m *MainWindow) currentWord() bool {
 	exists, newWord := m.list.CurrentWord()
 	if exists {
-		m.setWord(newWord)
+		m.setWord(newWord.English)
 	}
 	return exists
 }
@@ -212,6 +212,15 @@ func (m *MainWindow) reset() {
 	}
 }
 
+func (m *MainWindow) UpdateList() error {
+	list, err := word.NewList()
+	if err != nil {
+		return err
+	}
+	m.list = list
+	return nil
+}
+
 func (m *MainWindow) ShowAndRun() {
 	m.window.RequestFocus()
 	m.window.ShowAndRun()
@@ -222,16 +231,15 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 	if picNumPerLine > config.PicTotalNumber {
 		picNumPerLine = config.PicTotalNumber
 	}
+
 	mainWindow := &MainWindow{
 		window:        app.NewWindow("EarLang"),
 		imagesGrid:    container.New(layout.NewGridLayout(picNumPerLine)),
-		list:          word.NewList(),
 		word:          binding.NewString(),
 		wordLock:      sync.RWMutex{},
 		preloadLock:   sync.Mutex{},
 		autoReadPause: false,
 	}
-	go mainWindow.autoReadWord()
 
 	prevButton := widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {
 		mainWindow.prev()
@@ -293,14 +301,20 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 		}
 	})
 
-	exists := mainWindow.currentWord()
-	if !exists {
-		mainWindow.showError(fmt.Errorf("failed to load the word to learn"))
-	} else {
-		mainWindow.showWord()
+	if err := mainWindow.UpdateList(); err != nil {
+		mainWindow.showError(err)
+		goto ShowWindow
 	}
-	mainWindow.updateReadButtonIcon()
 
+	if exists := mainWindow.currentWord(); !exists {
+		mainWindow.showError(fmt.Errorf("failed to load the word to learn"))
+		goto ShowWindow
+	}
+	mainWindow.showWord()
+	mainWindow.updateReadButtonIcon()
+	go mainWindow.autoReadWord()
+
+ShowWindow:
 	mainWindow.window.SetContent(mainGrid)
 	mainWindow.window.SetIcon(resource.EarIcoe)
 	mainWindow.window.SetMaster()

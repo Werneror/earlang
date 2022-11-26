@@ -71,6 +71,9 @@ func WordPictures(word string, number int) ([]string, error) {
 			return nil, err
 		}
 		paths = append(paths, localPath)
+		if len(paths) >= number {
+			break
+		}
 	}
 	return paths, nil
 }

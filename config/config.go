@@ -23,6 +23,9 @@ var PronPicker = "cambridge"
 var PronRegion = "us"
 
 const (
+	WordGroupTypeBuiltin = "builtin"
+	WordGroupTypeCustom  = "custom"
+
 	WordSelectModeOrder  = "order"
 	WordSelectModeRandom = "random"
 
@@ -31,7 +34,9 @@ const (
 	WordReadModeManual = "manual"
 )
 
-var WordListFile = "words.txt"
+var GroupType = WordGroupTypeBuiltin
+var GroupName = "tools 01"
+var GroupFile = ""
 var WordLearnedFile = "learned.txt"
 var WordProgressFile = "progress.txt"
 var WordSelectMode = WordSelectModeRandom
@@ -71,7 +76,9 @@ func init() {
 	viper.SetDefault("pronunciation.picker", PronPicker)
 	viper.SetDefault("pronunciation.region", PronRegion)
 
-	viper.SetDefault("word.list_file", WordListFile)
+	viper.SetDefault("word.group_type", GroupFile)
+	viper.SetDefault("word.group_name", GroupName)
+	viper.SetDefault("word.group_file", GroupFile)
 	viper.SetDefault("word.learned_file", WordLearnedFile)
 	viper.SetDefault("word.progress_file", WordProgressFile)
 	viper.SetDefault("word.select_mode", WordSelectMode)
@@ -103,7 +110,9 @@ func init() {
 	PronPicker = viper.GetString("pronunciation.picker")
 	PronRegion = viper.GetString("pronunciation.region")
 
-	WordListFile = viper.GetString("word.list_file")
+	GroupFile = viper.GetString("word.group_type")
+	GroupName = viper.GetString("word.group_name")
+	GroupFile = viper.GetString("word.group_file")
 	WordLearnedFile = viper.GetString("word.learned_file")
 	WordProgressFile = viper.GetString("word.progress_file")
 	WordSelectMode = viper.GetString("word.select_mode")
