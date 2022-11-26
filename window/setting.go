@@ -118,7 +118,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			{Text: "show Chinese", Widget: showChineseCheck},
 		},
 		OnSubmit: func() {
-			needUpdateList := true
+			needUpdateList := false
 			needUpdateWord := false
 			needUpdateReadButtonIcon := false
 
