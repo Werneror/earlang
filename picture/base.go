@@ -53,7 +53,7 @@ func WordPictures(word string, number int) ([]string, error) {
 		}
 	}
 
-	urls, err := picker.WordPictures(word, number)
+	urls, err := picker.WordPictures(word, number+5)
 	if err != nil {
 		return nil, err
 	}
