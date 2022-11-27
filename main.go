@@ -9,11 +9,9 @@ import (
 	"github.com/flopp/go-findfont"
 )
 
-var version = "0.0.2"
-
 func main() {
-	earlang := app.NewWithID("wiki.werner.earlang")
-	mainWindow := window.NewMainWindow(earlang, version)
+	earlang := app.New()
+	mainWindow := window.NewMainWindow(earlang)
 	mainWindow.ShowAndRun()
 }
 

@@ -267,7 +267,7 @@ func (m *MainWindow) ShowAndRun() {
 	m.window.ShowAndRun()
 }
 
-func NewMainWindow(app fyne.App, version string) *MainWindow {
+func NewMainWindow(app fyne.App) *MainWindow {
 	picNumPerLine := config.PicNumPerLine
 	if picNumPerLine > config.PicTotalNumber {
 		picNumPerLine = config.PicTotalNumber
@@ -327,7 +327,7 @@ func NewMainWindow(app fyne.App, version string) *MainWindow {
 			newSettingWindow(app, mainWindow).Show()
 		}),
 		widget.NewToolbarAction(theme.InfoIcon(), func() {
-			newAboutWindow(app, version).Show()
+			newAboutWindow(app).Show()
 		}),
 	)
 

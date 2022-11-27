@@ -21,14 +21,14 @@ func (a *aboutWindow) Show() {
 	a.window.Show()
 }
 
-func newAboutWindow(app fyne.App, version string) *aboutWindow {
+func newAboutWindow(app fyne.App) *aboutWindow {
 	w := &aboutWindow{
 		window: app.NewWindow("EarLang About"),
 	}
 
 	softwareText := canvas.NewText("EarLang", color.Black)
 	softwareText.TextSize = 24
-	versionText := canvas.NewText(version, color.Black)
+	versionText := canvas.NewText(app.Metadata().Version, color.Black)
 	softwareBox := container.New(layout.NewHBoxLayout(), softwareText, versionText)
 
 	homepageText := canvas.NewText("Homepage:", color.Black)
