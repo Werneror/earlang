@@ -24,7 +24,7 @@
 
 主页面如下图所示：
 
-![MainWindow](https://user-images.githubusercontent.com/16622293/202831416-4eac3cef-c416-4c2c-aec7-2dbd4ff37cae.png)
+![MainWindow](https://user-images.githubusercontent.com/16622293/204133283-747ab126-8500-49ba-8e16-47509f2918bc.png)
 
 会展示一些图片，并每隔 2 秒朗读一次对应英语单词的读音。
 
@@ -42,7 +42,7 @@
 
 设置页面如下图所示：
 
-![SettingWindow](https://user-images.githubusercontent.com/16622293/202831416-4eac3cef-c416-4c2c-aec7-2dbd4ff37cae.png)
+![SettingWindow](https://user-images.githubusercontent.com/16622293/204133317-9c80dc05-62bf-48d2-8ab6-f0d12306607f.png)
 
 ### 快捷键
 
