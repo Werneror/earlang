@@ -77,7 +77,7 @@ func init() {
 	viper.SetDefault("pronunciation.picker", PronPicker)
 	viper.SetDefault("pronunciation.region", PronRegion)
 
-	viper.SetDefault("word.group_type", GroupFile)
+	viper.SetDefault("word.group_type", GroupType)
 	viper.SetDefault("word.group_name", GroupName)
 	viper.SetDefault("word.group_file", GroupFile)
 	viper.SetDefault("word.learned_file", WordLearnedFile)
@@ -112,7 +112,7 @@ func init() {
 	PronPicker = viper.GetString("pronunciation.picker")
 	PronRegion = viper.GetString("pronunciation.region")
 
-	GroupFile = viper.GetString("word.group_type")
+	GroupType = viper.GetString("word.group_type")
 	GroupName = viper.GetString("word.group_name")
 	GroupFile = viper.GetString("word.group_file")
 	WordLearnedFile = viper.GetString("word.learned_file")

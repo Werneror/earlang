@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -137,6 +138,7 @@ func (l *List) loadWordList() error {
 			Name:  l.groupName,
 			Words: words,
 		}
+		logrus.Debugf("custom words is %v", words)
 	}
 	return nil
 }
@@ -144,7 +146,9 @@ func (l *List) loadWordList() error {
 func NewList() (*List, error) {
 	groupName := config.GroupName
 	if config.GroupType == config.WordGroupTypeCustom {
-		groupName = "custom"
+		filename := filepath.Base(config.GroupFile)
+		ext := filepath.Ext(filename)
+		groupName = strings.TrimSuffix(filename, ext)
 	}
 
 	wordDir := filepath.Join(config.BaseDir, "word")
@@ -158,6 +162,7 @@ func NewList() (*List, error) {
 	} else {
 		groupFile = filepath.Join(config.BaseDir, config.GroupFile)
 	}
+	logrus.Debugf("group file is %s", groupFile)
 
 	l := &List{
 		groupType:        config.GroupType,

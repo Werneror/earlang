@@ -16,15 +16,16 @@ func LoadWordsFromFile(filePath string) ([]group.Word, error) {
 	s := strings.Split(string(content), "\n")
 	words := make([]group.Word, 0, len(s))
 	for _, w := range s {
+		w = strings.TrimSpace(w)
 		if w == "" {
 			continue
 		}
 		pieces := strings.SplitN(w, ",", 2)
 		newWord := group.Word{
-			English: pieces[0],
+			English: strings.TrimSpace(pieces[0]),
 		}
 		if len(pieces) > 1 {
-			newWord.Chinese = pieces[1]
+			newWord.Chinese = strings.TrimSpace(pieces[1])
 		}
 		words = append(words, newWord)
 	}
