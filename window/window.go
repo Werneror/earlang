@@ -357,6 +357,8 @@ func NewMainWindow(app fyne.App) *MainWindow {
 			mainWindow.tempShowEnglish()
 		case "C":
 			mainWindow.tempShowChinese()
+		case "R":
+			mainWindow.reset()
 		}
 	})
 
