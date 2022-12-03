@@ -1,7 +1,7 @@
 package group
 
 var Body01 = Group{
-	Name: "body 01",
+	Name: "school things",
 	Words: []Word{
 		{English: "head", Chinese: "头"},
 		{English: "hair", Chinese: "头发"},

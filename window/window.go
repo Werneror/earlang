@@ -9,6 +9,7 @@ import (
 	"earlang/word/group"
 	"fmt"
 	"os/exec"
+	"runtime"
 	"sync"
 	"time"
 
@@ -318,7 +319,13 @@ func NewMainWindow(app fyne.App) *MainWindow {
 		}),
 		widget.NewToolbarSeparator(),
 		widget.NewToolbarAction(theme.FolderOpenIcon(), func() {
-			err := exec.Command(`explorer.exe`, config.BaseDir).Start()
+			var command string
+			if runtime.GOOS == "windows" {
+				command = "explorer.exe"
+			} else {
+				command = "open"
+			}
+			err := exec.Command(command, config.BaseDir).Start()
 			if err != nil {
 				mainWindow.showError(err)
 			}
