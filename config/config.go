@@ -1,6 +1,7 @@
 package config
 
 import (
+	"earlang/word/group"
 	"os"
 	"path/filepath"
 
@@ -35,7 +36,7 @@ const (
 )
 
 var GroupType = WordGroupTypeBuiltin
-var GroupName = "tools 01"
+var GroupName = group.Groups[0].Name
 var GroupFile = ""
 var WordLearnedFile = "learned.txt"
 var WordProgressFile = "progress.txt"

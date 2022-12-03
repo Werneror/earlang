@@ -3,10 +3,12 @@ package window
 import (
 	"earlang/config"
 	"earlang/resource"
+	"earlang/word"
 	"earlang/word/group"
 	"fmt"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/dialog"
@@ -24,6 +26,23 @@ type settingWindow struct {
 func (s *settingWindow) Show() {
 	s.window.RequestFocus()
 	s.window.Show()
+}
+
+func GetGroupDisplayName(g group.Group) string {
+	total := len(g.Words)
+	processFilePath := filepath.Join(config.BaseDir, "word", fmt.Sprintf("%s_%s", g.Name, config.WordProgressFile))
+	process, err := word.LoadPointerFromFile(processFilePath)
+	if err != nil {
+		logrus.Errorf("failed to load pointer from file %s: %v", processFilePath, err)
+		process = 0
+	}
+	return fmt.Sprintf("%s (%d/%d)", g.Name, process, total)
+}
+
+func DisplayNameToGroupName(displayName string) string {
+	z := strings.Split(displayName, " (")
+	z = z[:len(z)-1]
+	return strings.Join(z, " (")
 }
 
 func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
@@ -51,11 +70,16 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	groupTypeSelect.SetSelected(config.GroupType)
 
 	groupNames := make([]string, 0, len(group.Groups))
+	var currentDisplayName string
 	for _, g := range group.Groups {
-		groupNames = append(groupNames, g.Name)
+		displayName := GetGroupDisplayName(g)
+		groupNames = append(groupNames, displayName)
+		if config.GroupName == g.Name {
+			currentDisplayName = displayName
+		}
 	}
 	groupNameSelect := widget.NewSelect(groupNames, func(s string) {})
-	groupNameSelect.SetSelected(config.GroupName)
+	groupNameSelect.SetSelected(currentDisplayName)
 
 	newGroupFile := config.GroupFile
 	var groupFileButton *widget.Button
@@ -151,10 +175,11 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			config.GroupType = groupTypeSelect.Selected
 			viper.Set("word.group_type", config.GroupType)
 
-			if config.GroupType == config.WordGroupTypeBuiltin && config.GroupName != groupNameSelect.Selected {
+			selectedGroupName := DisplayNameToGroupName(groupNameSelect.Selected)
+			if config.GroupType == config.WordGroupTypeBuiltin && config.GroupName != selectedGroupName {
 				needUpdateList = true
 			}
-			config.GroupName = groupNameSelect.Selected
+			config.GroupName = selectedGroupName
 			viper.Set("word.group_name", config.GroupName)
 
 			if config.GroupType == config.WordGroupTypeCustom && config.GroupFile != newGroupFile {
