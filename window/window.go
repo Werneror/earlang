@@ -265,6 +265,7 @@ func (m *MainWindow) UpdateList() error {
 
 func (m *MainWindow) ShowAndRun() {
 	m.window.RequestFocus()
+	m.window.CenterOnScreen()
 	m.window.ShowAndRun()
 }
 
@@ -364,18 +365,18 @@ func NewMainWindow(app fyne.App) *MainWindow {
 
 	if err := mainWindow.UpdateList(); err != nil {
 		mainWindow.showError(err)
-		goto ShowWindow
+		goto Finish
 	}
 
 	if exists := mainWindow.currentWord(); !exists {
 		mainWindow.showError(fmt.Errorf("failed to load the word to learn"))
-		goto ShowWindow
+		goto Finish
 	}
 	mainWindow.showWord()
 	mainWindow.updateReadButtonIcon()
 	go mainWindow.autoReadWord()
 
-ShowWindow:
+Finish:
 	mainWindow.window.SetContent(mainGrid)
 	mainWindow.window.SetIcon(resource.EarIcoe)
 	mainWindow.window.SetMaster()
