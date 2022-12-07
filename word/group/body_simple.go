@@ -12,7 +12,6 @@ var BodySimple = Group{
 		{English: "eye", Chinese: "眼睛"},
 		{English: "ear", Chinese: "耳朵"},
 		{English: "arm", Chinese: "手臂"},
-		{English: "hand", Chinese: "手"},
 		{English: "finger", Chinese: "手指"},
 		{English: "leg", Chinese: "腿"},
 		{English: "tail", Chinese: "尾巴"},
