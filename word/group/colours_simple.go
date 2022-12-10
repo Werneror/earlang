@@ -11,7 +11,6 @@ var ColoursSimple = Group{
 		{English: "black", Chinese: "黑"},
 		{English: "pink", Chinese: "粉红"},
 		{English: "purple", Chinese: "紫"},
-		{English: "orange", Chinese: "橙"},
 		{English: "brown", Chinese: "棕"},
 	},
 }

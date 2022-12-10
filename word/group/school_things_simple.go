@@ -13,7 +13,6 @@ var SchoolThingsSimple = Group{
 		{English: "crayon", Chinese: "蜡笔"},
 		{English: "sharpener", Chinese: "卷笔刀"},
 		{English: "magazine", Chinese: "杂志"},
-		{English: "newspaper", Chinese: "报纸"},
 		{English: "dictionary", Chinese: "词典"},
 	},
 }
