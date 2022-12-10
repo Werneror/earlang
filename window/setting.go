@@ -6,6 +6,7 @@ import (
 	"earlang/word"
 	"earlang/word/group"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -33,8 +34,12 @@ func GetGroupDisplayName(g group.Group) string {
 	processFilePath := filepath.Join(config.BaseDir, "word", fmt.Sprintf("%s_%s", g.Name, config.WordProgressFile))
 	process, err := word.LoadPointerFromFile(processFilePath)
 	if err != nil {
-		logrus.Errorf("failed to load pointer from file %s: %v", processFilePath, err)
+		if !os.IsNotExist(err) {
+			logrus.Errorf("failed to load pointer from file %s: %v", processFilePath, err)
+		}
 		process = 0
+	} else {
+		process = process + 1
 	}
 	return fmt.Sprintf("%s (%d/%d)", g.Name, process, total)
 }

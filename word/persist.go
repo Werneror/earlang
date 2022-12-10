@@ -46,7 +46,7 @@ func SaveWordsToFile(filePath string, words []group.Word) error {
 
 func LoadPointerFromFile(filePath string) (int, error) {
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
-		return 0, nil
+		return 0, err
 	}
 	content, err := os.ReadFile(filePath)
 	if err != nil {

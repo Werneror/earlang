@@ -1,6 +1,10 @@
 package word
 
-import "github.com/sirupsen/logrus"
+import (
+	"os"
+
+	"github.com/sirupsen/logrus"
+)
 
 type pointer struct {
 	pointer     int
@@ -35,7 +39,7 @@ func (p *pointer) getValue() int {
 func (p *pointer) loadValue() error {
 	var err error
 	p.pointer, err = LoadPointerFromFile(p.persistFile)
-	if err != nil {
+	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
 	return nil
