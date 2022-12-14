@@ -15,6 +15,5 @@ var FruitsSimple = Group{
 		{English: "peach", Chinese: "桃"},
 		{English: "strawberry", Chinese: "草莓"},
 		{English: "durian", Chinese: "榴莲"},
-		{English: "lichee", Chinese: "荔枝"},
 	},
 }
