@@ -1,7 +1,7 @@
 package group
 
-var VehiclesThingsSimple = Group{
-	Name: "vehicles things - simple",
+var VehiclesSimple = Group{
+	Name: "vehicles - simple",
 	Words: []Word{
 		{English: "bike", Chinese: "自行车"},
 		{English: "bus", Chinese: "公共汽车"},
