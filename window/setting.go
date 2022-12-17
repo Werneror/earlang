@@ -76,7 +76,11 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 
 	groupNames := make([]string, 0, len(group.Groups))
 	var currentDisplayName string
+	words := map[string]bool{}
 	for _, g := range group.Groups {
+		for _, w := range g.Words {
+			words[w.English] = true
+		}
 		displayName := GetGroupDisplayName(g)
 		groupNames = append(groupNames, displayName)
 		if config.GroupName == g.Name {
@@ -85,6 +89,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	}
 	groupNameSelect := widget.NewSelect(groupNames, func(s string) {})
 	groupNameSelect.SetSelected(currentDisplayName)
+	groupNameSelectHint := fmt.Sprintf("groups: %d, total words: %d", len(group.Groups), len(words))
 
 	newGroupFile := config.GroupFile
 	var groupFileButton *widget.Button
@@ -138,7 +143,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			{Text: "picture source", Widget: picPickerSelect},
 			{Text: "picture number", Widget: picNumberSelect},
 			{Text: "word group type", Widget: groupTypeSelect},
-			{Text: "builtin group name", Widget: groupNameSelect},
+			{Text: "builtin group name", Widget: groupNameSelect, HintText: groupNameSelectHint},
 			{Text: "custom group file", Widget: groupFileButton},
 			{Text: "word read mode", Widget: readModeSelect},
 			{Text: "word auto read interval(s)", Widget: readAutoIntervalSelect},
