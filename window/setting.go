@@ -29,8 +29,7 @@ func (s *settingWindow) Show() {
 	s.window.Show()
 }
 
-func GetGroupDisplayName(g group.Group) string {
-	total := len(g.Words)
+func getGroupProcess(g group.Group) int {
 	processFilePath := filepath.Join(config.BaseDir, "word", fmt.Sprintf("%s_%s", g.Name, config.WordProgressFile))
 	process, err := word.LoadPointerFromFile(processFilePath)
 	if err != nil {
@@ -41,10 +40,14 @@ func GetGroupDisplayName(g group.Group) string {
 	} else {
 		process = process + 1
 	}
-	return fmt.Sprintf("%s (%d/%d)", g.Name, process, total)
+	return process
 }
 
-func DisplayNameToGroupName(displayName string) string {
+func getGroupDisplayName(groupName string, total, process int) string {
+	return fmt.Sprintf("%s (%d/%d)", groupName, process, total)
+}
+
+func displayNameToGroupName(displayName string) string {
 	z := strings.Split(displayName, " (")
 	z = z[:len(z)-1]
 	return strings.Join(z, " (")
@@ -74,14 +77,15 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	groupTypeSelect := widget.NewSelect([]string{config.WordGroupTypeBuiltin, config.WordGroupTypeCustom}, func(s string) {})
 	groupTypeSelect.SetSelected(config.GroupType)
 
+	allWords := 0
+	learnedWords := 0
 	groupNames := make([]string, 0, len(group.Groups))
 	var currentDisplayName string
-	words := map[string]bool{}
 	for _, g := range group.Groups {
-		for _, w := range g.Words {
-			words[w.English] = true
-		}
-		displayName := GetGroupDisplayName(g)
+		allWords += len(g.Words)
+		progress := getGroupProcess(g)
+		learnedWords += progress
+		displayName := getGroupDisplayName(g.Name, len(g.Words), progress)
 		groupNames = append(groupNames, displayName)
 		if config.GroupName == g.Name {
 			currentDisplayName = displayName
@@ -89,7 +93,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	}
 	groupNameSelect := widget.NewSelect(groupNames, func(s string) {})
 	groupNameSelect.SetSelected(currentDisplayName)
-	groupNameSelectHint := fmt.Sprintf("groups: %d, total words: %d", len(group.Groups), len(words))
+	groupNameSelectHint := fmt.Sprintf("groups: %d, total words: %d, learned words: %d", len(group.Groups), allWords, learnedWords)
 
 	newGroupFile := config.GroupFile
 	var groupFileButton *widget.Button
@@ -185,7 +189,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			config.GroupType = groupTypeSelect.Selected
 			viper.Set("word.group_type", config.GroupType)
 
-			selectedGroupName := DisplayNameToGroupName(groupNameSelect.Selected)
+			selectedGroupName := displayNameToGroupName(groupNameSelect.Selected)
 			if config.GroupType == config.WordGroupTypeBuiltin && config.GroupName != selectedGroupName {
 				needUpdateList = true
 			}
