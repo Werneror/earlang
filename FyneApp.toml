@@ -4,5 +4,5 @@ Website = "https://github.com/Werneror/earlang"
   Icon = "resource/ear.ico"
   Name = "earlang"
   ID = "wiki.werner.earlang"
-  Version = "0.0.5"
-  Build = 5
+  Version = "0.0.6"
+  Build = 6
