@@ -8,7 +8,7 @@ var VehiclesSimple = Group{
 		{English: "train", Chinese: "火车"},
 		{English: "boat", Chinese: "小船"},
 		{English: "ship", Chinese: "轮船"},
-		{English: "yacht", Chinese: "快艇"},
+		{English: "yacht", Chinese: "游艇"},
 		{English: "car", Chinese: "小汽车"},
 		{English: "taxi", Chinese: "出租车"},
 		{English: "jeep", Chinese: "吉普车"},
