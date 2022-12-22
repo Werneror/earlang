@@ -136,7 +136,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	showEnglishCheck := widget.NewCheck("show word below the pictures", func(bool) {})
 	showEnglishCheck.SetChecked(config.WordEnglishShow)
 
-	showChineseCheck := widget.NewCheck("show Chinese below the pictures", func(bool) {})
+	showChineseCheck := widget.NewCheck("show Chinese translation below the pictures", func(bool) {})
 	showChineseCheck.SetChecked(config.WordChineseShow)
 
 	form := &widget.Form{
