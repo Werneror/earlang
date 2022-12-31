@@ -1,4 +1,4 @@
-package group
+package builtin
 
 var TablewareSimple = Group{
 	Name: "tableware - simple",

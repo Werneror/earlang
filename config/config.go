@@ -1,7 +1,7 @@
 package config
 
 import (
-	"earlang/word/group"
+	"earlang/word/builtin"
 	"os"
 	"path/filepath"
 
@@ -10,6 +10,7 @@ import (
 )
 
 var BaseDir string
+var WordDir string
 
 var LogLevel = "warning"
 var LogFile = "earlang.log"
@@ -24,9 +25,6 @@ var PronPicker = "cambridge"
 var PronRegion = "us"
 
 const (
-	WordGroupTypeBuiltin = "builtin"
-	WordGroupTypeCustom  = "custom"
-
 	WordSelectModeOrder  = "order"
 	WordSelectModeRandom = "random"
 
@@ -35,11 +33,7 @@ const (
 	WordReadModeManual = "manual"
 )
 
-var GroupType = WordGroupTypeBuiltin
-var GroupName = group.Groups[0].Name
-var GroupFile = ""
-var WordLearnedFile = "learned.txt"
-var WordProgressFile = "progress.txt"
+var WordGroupName = builtin.Groups[0].Name
 var WordSelectMode = WordSelectModeRandom
 var WordReadMode = WordReadModeAuto
 var WordReadAutoInterval = 2
@@ -61,6 +55,16 @@ func init() {
 	}
 	logrus.Debugf("base directory is %s", BaseDir)
 
+	WordDir = filepath.Join(BaseDir, "word")
+	if _, err := os.Stat(WordDir); os.IsNotExist(err) {
+		_ = os.MkdirAll(WordDir, os.ModePerm)
+		err := builtin.SaveToDisk(WordDir)
+		if err != nil {
+			logrus.Errorf("failed to save built-in groups: %v", err)
+		}
+	}
+	logrus.Debugf("word directory is %s", WordDir)
+
 	// configure
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -78,11 +82,7 @@ func init() {
 	viper.SetDefault("pronunciation.picker", PronPicker)
 	viper.SetDefault("pronunciation.region", PronRegion)
 
-	viper.SetDefault("word.group_type", GroupType)
-	viper.SetDefault("word.group_name", GroupName)
-	viper.SetDefault("word.group_file", GroupFile)
-	viper.SetDefault("word.learned_file", WordLearnedFile)
-	viper.SetDefault("word.progress_file", WordProgressFile)
+	viper.SetDefault("word.group_name", WordGroupName)
 	viper.SetDefault("word.select_mode", WordSelectMode)
 	viper.SetDefault("word.read_mode", WordReadMode)
 	viper.SetDefault("word.read_auto_interval", WordReadAutoInterval)
@@ -113,11 +113,7 @@ func init() {
 	PronPicker = viper.GetString("pronunciation.picker")
 	PronRegion = viper.GetString("pronunciation.region")
 
-	GroupType = viper.GetString("word.group_type")
-	GroupName = viper.GetString("word.group_name")
-	GroupFile = viper.GetString("word.group_file")
-	WordLearnedFile = viper.GetString("word.learned_file")
-	WordProgressFile = viper.GetString("word.progress_file")
+	WordGroupName = viper.GetString("word.group_name")
 	WordSelectMode = viper.GetString("word.select_mode")
 	WordReadMode = viper.GetString("word.read_mode")
 	WordReadAutoInterval = viper.GetInt("word.read_auto_interval")

@@ -1,4 +1,4 @@
-package group
+package builtin
 
 var SportsSimple = Group{
 	Name: "sports - simple",

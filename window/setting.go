@@ -4,16 +4,11 @@ import (
 	"earlang/config"
 	"earlang/resource"
 	"earlang/word"
-	"earlang/word/group"
 	"fmt"
-	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/dialog"
-	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -27,20 +22,6 @@ type settingWindow struct {
 func (s *settingWindow) Show() {
 	s.window.RequestFocus()
 	s.window.Show()
-}
-
-func getGroupProcess(g group.Group) int {
-	processFilePath := filepath.Join(config.BaseDir, "word", fmt.Sprintf("%s_%s", g.Name, config.WordProgressFile))
-	process, err := word.LoadPointerFromFile(processFilePath)
-	if err != nil {
-		if !os.IsNotExist(err) {
-			logrus.Errorf("failed to load pointer from file %s: %v", processFilePath, err)
-		}
-		process = 0
-	} else {
-		process = process + 1
-	}
-	return process
 }
 
 func getGroupDisplayName(groupName string, total, process int) string {
@@ -74,55 +55,27 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	picNumberSelect := widget.NewSelect([]string{"5", "10", "15"}, func(string) {})
 	picNumberSelect.SetSelected(fmt.Sprintf("%d", config.PicTotalNumber))
 
-	groupTypeSelect := widget.NewSelect([]string{config.WordGroupTypeBuiltin, config.WordGroupTypeCustom}, func(s string) {})
-	groupTypeSelect.SetSelected(config.GroupType)
-
 	allWords := 0
 	learnedWords := 0
-	groupNames := make([]string, 0, len(group.Groups))
+	groupNames := make([]string, 0)
 	var currentDisplayName string
-	for _, g := range group.Groups {
-		allWords += len(g.Words)
-		progress := getGroupProcess(g)
+	groups, err := word.AllGroups()
+	if err != nil {
+		logrus.Errorf("failed to get all groups: %v", err)
+	}
+	for _, g := range groups {
+		allWords += g.GetWordsCount()
+		progress := g.GetProcess()
 		learnedWords += progress
 		displayName := getGroupDisplayName(g.Name, len(g.Words), progress)
 		groupNames = append(groupNames, displayName)
-		if config.GroupName == g.Name {
+		if config.WordGroupName == g.Name {
 			currentDisplayName = displayName
 		}
 	}
 	groupNameSelect := widget.NewSelect(groupNames, func(s string) {})
 	groupNameSelect.SetSelected(currentDisplayName)
-	groupNameSelectHint := fmt.Sprintf("groups: %d, total words: %d, learned words: %d", len(group.Groups), allWords, learnedWords)
-
-	newGroupFile := config.GroupFile
-	var groupFileButton *widget.Button
-	groupFileButton = widget.NewButton(config.GroupFile, func() {
-		fd := dialog.NewFileOpen(func(reader fyne.URIReadCloser, err error) {
-			if err != nil {
-				dialog.ShowError(err, s.window)
-				return
-			}
-			if reader == nil {
-				return
-			}
-			defer reader.Close()
-			relPath, err := filepath.Rel(config.BaseDir, reader.URI().Path())
-			if err != nil {
-				// 如果选中的文件和 BaseDir 不在同一个磁盘上求相对路径就会出错，这时直接使用绝对路径
-				newGroupFile = reader.URI().Path()
-			} else {
-				newGroupFile = relPath
-			}
-			groupFileButton.SetText(newGroupFile)
-		}, s.window)
-		dir, err := storage.ListerForURI(storage.NewFileURI(config.BaseDir))
-		if err == nil {
-			fd.SetLocation(dir)
-		}
-		fd.SetFilter(storage.NewExtensionFileFilter([]string{".txt"}))
-		fd.Show()
-	})
+	groupNameSelectHint := fmt.Sprintf("groups: %d, total words: %d, learned words: %d", len(groups), allWords, learnedWords)
 
 	readModeSelect := widget.NewSelect([]string{config.WordReadModeAuto, config.WordReadModeOnce, config.WordReadModeManual}, func(string) {})
 	readModeSelect.SetSelected(config.WordReadMode)
@@ -146,9 +99,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			{Text: "pronunciation region", Widget: pronRegionSelect},
 			{Text: "picture source", Widget: picPickerSelect},
 			{Text: "picture number", Widget: picNumberSelect},
-			{Text: "word group type", Widget: groupTypeSelect},
-			{Text: "builtin group name", Widget: groupNameSelect, HintText: groupNameSelectHint},
-			{Text: "custom group file", Widget: groupFileButton},
+			{Text: "word group name", Widget: groupNameSelect, HintText: groupNameSelectHint},
 			{Text: "word read mode", Widget: readModeSelect},
 			{Text: "word auto read interval(s)", Widget: readAutoIntervalSelect},
 			{Text: "word select mode", Widget: wordSelectModeSelect},
@@ -183,24 +134,12 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			config.PicTotalNumber = picNumber
 			viper.Set("picture.total_number", config.PicTotalNumber)
 
-			if config.GroupType != groupTypeSelect.Selected {
-				needUpdateList = true
-			}
-			config.GroupType = groupTypeSelect.Selected
-			viper.Set("word.group_type", config.GroupType)
-
 			selectedGroupName := displayNameToGroupName(groupNameSelect.Selected)
-			if config.GroupType == config.WordGroupTypeBuiltin && config.GroupName != selectedGroupName {
+			if config.WordGroupName != selectedGroupName {
 				needUpdateList = true
 			}
-			config.GroupName = selectedGroupName
-			viper.Set("word.group_name", config.GroupName)
-
-			if config.GroupType == config.WordGroupTypeCustom && config.GroupFile != newGroupFile {
-				needUpdateList = true
-			}
-			config.GroupFile = newGroupFile
-			viper.Set("word.group_file", config.GroupFile)
+			config.WordGroupName = selectedGroupName
+			viper.Set("word.group_name", config.WordGroupName)
 
 			if config.WordReadMode != readModeSelect.Selected {
 				needUpdateReadButtonIcon = true

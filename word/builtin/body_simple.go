@@ -1,4 +1,4 @@
-package group
+package builtin
 
 var BodySimple = Group{
 	Name: "body - simple",

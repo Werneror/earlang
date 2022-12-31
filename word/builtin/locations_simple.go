@@ -1,4 +1,4 @@
-package group
+package builtin
 
 var LocationsSimple = Group{
 	Name: "locations - simple",

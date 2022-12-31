@@ -6,7 +6,6 @@ import (
 	"earlang/pronunciation"
 	"earlang/resource"
 	"earlang/word"
-	"earlang/word/group"
 	"fmt"
 	"os/exec"
 	"runtime"
@@ -55,7 +54,7 @@ func (m *MainWindow) getWord() string {
 	return w
 }
 
-func (m *MainWindow) setWord(w group.Word) {
+func (m *MainWindow) setWord(w word.Word) {
 	m.wordLock.Lock()
 	m.wordLock.Unlock()
 	err := m.english.Set(w.English)
@@ -255,7 +254,7 @@ func (m *MainWindow) reset() {
 }
 
 func (m *MainWindow) UpdateList() error {
-	list, err := word.NewList()
+	list, err := word.NewList(config.WordGroupName)
 	if err != nil {
 		return err
 	}

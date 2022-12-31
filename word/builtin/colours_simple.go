@@ -1,4 +1,4 @@
-package group
+package builtin
 
 var ColoursSimple = Group{
 	Name: "colours - simple",

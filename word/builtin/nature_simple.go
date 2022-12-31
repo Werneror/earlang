@@ -1,4 +1,4 @@
-package group
+package builtin
 
 var NaturesSimple = Group{
 	Name: "nature - simple",

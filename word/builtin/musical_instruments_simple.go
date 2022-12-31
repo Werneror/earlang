@@ -1,4 +1,4 @@
-package group
+package builtin
 
 var MusicalInstrumentsSimple = Group{
 	Name: "musical instruments - simple",
