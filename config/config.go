@@ -58,12 +58,13 @@ func init() {
 	WordDir = filepath.Join(BaseDir, "word")
 	if _, err := os.Stat(WordDir); os.IsNotExist(err) {
 		_ = os.MkdirAll(WordDir, os.ModePerm)
-		err := builtin.SaveToDisk(WordDir)
-		if err != nil {
-			logrus.Errorf("failed to save built-in groups: %v", err)
-		}
 	}
 	logrus.Debugf("word directory is %s", WordDir)
+
+	err := builtin.SaveToDisk(WordDir)
+	if err != nil {
+		logrus.Errorf("failed to save built-in groups: %v", err)
+	}
 
 	// configure
 	viper.SetConfigName("config")
