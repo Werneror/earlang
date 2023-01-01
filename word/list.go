@@ -1,9 +1,10 @@
 package word
 
 import (
-	"earlang/config"
 	"math/rand"
 	"time"
+
+	"github.com/werneror/earlang/config"
 )
 
 type List struct {

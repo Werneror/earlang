@@ -1,12 +1,13 @@
 package picture
 
 import (
-	"earlang/common"
-	"earlang/config"
 	"fmt"
 	"log"
 	"os"
 	"path"
+
+	"github.com/werneror/earlang/common"
+	"github.com/werneror/earlang/config"
 )
 
 type PicPicker interface {

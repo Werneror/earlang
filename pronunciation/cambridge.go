@@ -1,12 +1,12 @@
 package pronunciation
 
 import (
-	"earlang/common"
 	"fmt"
 	"net/url"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/werneror/earlang/common"
 )
 
 type CambridgeDictionary struct {

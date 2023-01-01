@@ -1,7 +1,6 @@
 package window
 
 import (
-	"earlang/resource"
 	"image/color"
 	"net/url"
 
@@ -10,6 +9,7 @@ import (
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
+	"github.com/werneror/earlang/resource"
 )
 
 type aboutWindow struct {

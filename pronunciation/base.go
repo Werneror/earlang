@@ -1,13 +1,14 @@
 package pronunciation
 
 import (
-	"earlang/common"
-	"earlang/config"
 	"fmt"
 	"log"
 	"os"
 	"path"
 	"sync"
+
+	"github.com/werneror/earlang/common"
+	"github.com/werneror/earlang/config"
 )
 
 type PronPicker interface {

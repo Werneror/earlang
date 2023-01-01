@@ -1,9 +1,10 @@
 package word
 
 import (
-	"earlang/config"
 	"os"
 	"strings"
+
+	"github.com/werneror/earlang/config"
 )
 
 func AllGroups() ([]*Group, error) {

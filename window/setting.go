@@ -1,9 +1,6 @@
 package window
 
 import (
-	"earlang/config"
-	"earlang/resource"
-	"earlang/word"
 	"fmt"
 	"strconv"
 	"strings"
@@ -12,6 +9,9 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/werneror/earlang/config"
+	"github.com/werneror/earlang/resource"
+	"github.com/werneror/earlang/word"
 )
 
 type settingWindow struct {

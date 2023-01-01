@@ -1,11 +1,6 @@
 package window
 
 import (
-	"earlang/config"
-	"earlang/picture"
-	"earlang/pronunciation"
-	"earlang/resource"
-	"earlang/word"
 	"fmt"
 	"os/exec"
 	"runtime"
@@ -21,6 +16,11 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"github.com/sirupsen/logrus"
+	"github.com/werneror/earlang/config"
+	"github.com/werneror/earlang/picture"
+	"github.com/werneror/earlang/pronunciation"
+	"github.com/werneror/earlang/resource"
+	"github.com/werneror/earlang/word"
 )
 
 type MainWindow struct {

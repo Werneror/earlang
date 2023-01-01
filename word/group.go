@@ -1,7 +1,6 @@
 package word
 
 import (
-	"earlang/config"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/werneror/earlang/config"
 )
 
 type Word struct {

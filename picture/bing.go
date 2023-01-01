@@ -1,11 +1,11 @@
 package picture
 
 import (
-	"earlang/common"
 	"fmt"
 	"net/url"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/werneror/earlang/common"
 )
 
 type BingImageSearch struct {

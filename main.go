@@ -1,12 +1,12 @@
 package main
 
 import (
-	"earlang/window"
 	"os"
 	"strings"
 
 	"fyne.io/fyne/v2/app"
 	"github.com/flopp/go-findfont"
+	"github.com/werneror/earlang/window"
 )
 
 func main() {

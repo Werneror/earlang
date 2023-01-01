@@ -1,12 +1,12 @@
 package config
 
 import (
-	"earlang/word/builtin"
 	"os"
 	"path/filepath"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/werneror/earlang/word/builtin"
 )
 
 var BaseDir string
