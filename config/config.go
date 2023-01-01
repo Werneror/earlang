@@ -40,6 +40,9 @@ var WordReadAutoInterval = 2
 var WordEnglishShow = false
 var WordChineseShow = false
 
+var FyneFont string
+var FyneScale = 1.2
+
 func init() {
 	// Determine the base directory
 	appData := os.Getenv("AppData")
@@ -90,6 +93,9 @@ func init() {
 	viper.SetDefault("word.show_english", WordEnglishShow)
 	viper.SetDefault("word.show_chinese", WordChineseShow)
 
+	viper.SetDefault("fyne.font", FyneFont)
+	viper.SetDefault("fyne.scale", FyneScale)
+
 	if err := viper.ReadInConfig(); err != nil {
 		logrus.Errorf("failed to read config: %v", err)
 		if err := viper.SafeWriteConfig(); err != nil {
@@ -120,6 +126,9 @@ func init() {
 	WordReadAutoInterval = viper.GetInt("word.read_auto_interval")
 	WordEnglishShow = viper.GetBool("word.show_english")
 	WordChineseShow = viper.GetBool("word.show_chinese")
+
+	FyneFont = viper.GetString("fyne.font")
+	FyneScale = viper.GetFloat64("fyne.scale")
 
 	// log
 	level, err := logrus.ParseLevel(LogLevel)
