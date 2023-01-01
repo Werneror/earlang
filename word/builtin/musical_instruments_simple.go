@@ -1,7 +1,7 @@
 package builtin
 
 var MusicalInstrumentsSimple = Group{
-	Name: "musical instruments - simple",
+	Name: "musical instruments(simple,builtin)",
 	Words: []Word{
 		{English: "violin", Chinese: "小提琴"},
 		{English: "cello", Chinese: "大提琴"},

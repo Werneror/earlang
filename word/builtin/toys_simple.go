@@ -1,7 +1,7 @@
 package builtin
 
 var ToysSimple = Group{
-	Name: "toys - simple",
+	Name: "toys(simple,builtin)",
 	Words: []Word{
 		{English: "doll", Chinese: "洋娃娃"},
 		{English: "ball", Chinese: "球"},

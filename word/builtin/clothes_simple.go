@@ -1,7 +1,7 @@
 package builtin
 
 var ClothesSimple = Group{
-	Name: "clothes - simple",
+	Name: "clothes(simple,builtin)",
 	Words: []Word{
 		{English: "jacket", Chinese: "夹克衫"},
 		{English: "shirt", Chinese: "衬衫"},

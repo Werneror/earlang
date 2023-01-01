@@ -1,7 +1,7 @@
 package builtin
 
 var LocationsSimple = Group{
-	Name: "locations - simple",
+	Name: "locations(simple,builtin)",
 	Words: []Word{
 		{English: "kitchen", Chinese: "厨房"},
 		{English: "school", Chinese: "学校"},

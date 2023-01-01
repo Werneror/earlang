@@ -1,7 +1,7 @@
 package builtin
 
 var PlantsSimple = Group{
-	Name: "plants - simple",
+	Name: "plants(simple,builtin)",
 	Words: []Word{
 		{English: "grass", Chinese: "草"},
 		{English: "tree", Chinese: "树"},
