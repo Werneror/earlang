@@ -217,9 +217,9 @@ func (g *Group) GetRealLearnedWords() []Word {
 func NewGroup(groupName string) (*Group, error) {
 	g := &Group{
 		Name:                 groupName,
-		wordsFilePath:        filepath.Join(config.WordDir, fmt.Sprintf("%s.list", groupName)),
-		learnedWordsFilePath: filepath.Join(config.WordDir, fmt.Sprintf("%s.learned", groupName)),
-		processFilePath:      filepath.Join(config.WordDir, fmt.Sprintf("%s.process", groupName)),
+		wordsFilePath:        filepath.Join(config.WordDir, fmt.Sprintf("%s%s", groupName, config.WordListFileExtension)),
+		learnedWordsFilePath: filepath.Join(config.WordDir, fmt.Sprintf("%s%s", groupName, config.WordLearnedFileExtension)),
+		processFilePath:      filepath.Join(config.WordDir, fmt.Sprintf("%s%s", groupName, config.WordProcessFileExtension)),
 	}
 	err := g.LoadWordsFromFile()
 	if err != nil {

@@ -18,10 +18,10 @@ func AllGroups() ([]*Group, error) {
 			continue
 		}
 		name := f.Name()
-		if !strings.HasSuffix(name, ".list") {
+		if !strings.HasSuffix(name, config.WordListFileExtension) {
 			continue
 		}
-		g, err := NewGroup(strings.TrimSuffix(name, ".list"))
+		g, err := NewGroup(strings.TrimSuffix(name, config.WordListFileExtension))
 		if err != nil {
 			return nil, err
 		}

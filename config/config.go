@@ -40,6 +40,10 @@ var WordReadAutoInterval = 2
 var WordEnglishShow = false
 var WordChineseShow = false
 
+var WordListFileExtension = ".txt"
+var WordLearnedFileExtension = ".ld"
+var WordProcessFileExtension = ".proc"
+
 var FyneFont string
 var FyneScale = 1.2
 

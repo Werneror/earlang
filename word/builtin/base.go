@@ -21,7 +21,7 @@ type Group struct {
 
 func SaveToDisk(dir string) error {
 	for _, group := range Groups {
-		path := filepath.Join(dir, fmt.Sprintf("%s.list", group.Name))
+		path := filepath.Join(dir, fmt.Sprintf("%s.txt", group.Name))
 		s := make([]string, 0, len(group.Words))
 		for _, w := range group.Words {
 			s = append(s, fmt.Sprintf("%s,%s", w.English, w.Chinese))
