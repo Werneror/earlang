@@ -17,6 +17,13 @@ func main() {
 }
 
 func init() {
+	if os.Getenv("FYNE_SCALE") == "" {
+		err := os.Setenv("FYNE_SCALE", "1.2")
+		if err != nil {
+			logrus.Errorf("failed to set env FYNE_SCALE to 1.2: %v", err)
+		}
+	}
+
 	r := os.Getenv("FYNE_FONT")
 	if r != "" {
 		logrus.Debugf("the value of env FYNE_FONT is %s", r)
