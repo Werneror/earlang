@@ -178,6 +178,13 @@ func (g *Group) ProcessMinusOne() error {
 	return nil
 }
 
+func (g *Group) ProcessFileExist() bool {
+	if _, err := os.Stat(g.processFilePath); os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
+
 func (g *Group) LoadProcessFromFile() error {
 	if _, err := os.Stat(g.processFilePath); os.IsNotExist(err) {
 		g.process = 0

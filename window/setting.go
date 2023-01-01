@@ -66,6 +66,9 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	for _, g := range groups {
 		allWords += g.GetWordsCount()
 		progress := g.GetProcess()
+		if g.ProcessFileExist() {
+			progress += 1
+		}
 		learnedWords += progress
 		displayName := getGroupDisplayName(g.Name, len(g.Words), progress)
 		groupNames = append(groupNames, displayName)
