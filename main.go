@@ -6,6 +6,7 @@ import (
 
 	"fyne.io/fyne/v2/app"
 	"github.com/flopp/go-findfont"
+	"github.com/sirupsen/logrus"
 	"github.com/werneror/earlang/window"
 )
 
@@ -16,13 +17,24 @@ func main() {
 }
 
 func init() {
+	r := os.Getenv("FYNE_FONT")
+	if r != "" {
+		logrus.Debugf("the value of env FYNE_FONT is %s", r)
+		return
+	}
 	fontPaths := findfont.List()
 	for _, path := range fontPaths {
-		if strings.Contains(path, "msyh.ttc") || // 微软雅黑
-			strings.Contains(path, "simkai.ttf") || // 楷体
-			strings.Contains(path, "simhei.ttf") { // 黑体
-			os.Setenv("FYNE_FONT", path)
-			break
+		if strings.HasSuffix(path, "HGH_CNKI.TTF") || // 光华黑体
+			strings.HasSuffix(path, "simhei.ttf") || // 中易黑体
+			strings.HasSuffix(path, "simkai.ttf") { // 中易楷体
+			err := os.Setenv("FYNE_FONT", path)
+			if err != nil {
+				logrus.Errorf("failed to set env FYNE_FONT to %s: %v", path, err)
+			} else {
+				logrus.Debug("set the value of env FYNE_FONT to %s", path)
+			}
+			return
 		}
 	}
+	logrus.Warn("the value of env FYNE_FONT is not set, and Chinese characters may not be displayed")
 }
