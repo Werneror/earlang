@@ -55,8 +55,8 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	picNumberSelect := widget.NewSelect([]string{"5", "10", "15"}, func(string) {})
 	picNumberSelect.SetSelected(fmt.Sprintf("%d", config.PicTotalNumber))
 
-	allWords := 0
-	learnedWords := 0
+	allWords := make(map[string]bool, 0)
+	learnedWords := make(map[string]bool, 0)
 	groupNames := make([]string, 0)
 	var currentDisplayName string
 	groups, err := word.AllGroups()
@@ -64,12 +64,22 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 		logrus.Errorf("failed to get all groups: %v", err)
 	}
 	for _, g := range groups {
-		allWords += g.GetWordsCount()
+		// 不同单词组可能有重复的单词，这里进行去重
+		// 拼写相同、汉语意思不同的算两个单词
+		for _, w := range g.GetWords() {
+			key := fmt.Sprintf("%s,%s", w.English, w.Chinese)
+			if _, ok := allWords[key]; ok {
+				logrus.Infof("duplicate words found in group %s: %s", g.Name, key)
+			}
+			allWords[key] = true
+		}
+		for _, w := range g.GetRealLearnedWords() {
+			learnedWords[fmt.Sprintf("%s,%s", w.English, w.Chinese)] = true
+		}
 		progress := g.GetProcess()
 		if g.ProcessFileExist() {
 			progress += 1
 		}
-		learnedWords += progress
 		displayName := getGroupDisplayName(g.Name, len(g.Words), progress)
 		groupNames = append(groupNames, displayName)
 		if config.WordGroupName == g.Name {
@@ -78,7 +88,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	}
 	groupNameSelect := widget.NewSelect(groupNames, func(s string) {})
 	groupNameSelect.SetSelected(currentDisplayName)
-	groupNameSelectHint := fmt.Sprintf("groups: %d, total words: %d, learned words: %d", len(groups), allWords, learnedWords)
+	groupNameSelectHint := fmt.Sprintf("groups: %d, total words: %d, learned words: %d", len(groups), len(allWords), len(learnedWords))
 
 	readModeSelect := widget.NewSelect([]string{config.WordReadModeAuto, config.WordReadModeOnce, config.WordReadModeManual}, func(string) {})
 	readModeSelect.SetSelected(config.WordReadMode)

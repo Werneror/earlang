@@ -211,7 +211,10 @@ func (g *Group) SaveProcessToFile() error {
 }
 
 func (g *Group) GetRealLearnedWords() []Word {
-	return g.learnedWords[:g.process]
+	if g.process >= len(g.learnedWords) {
+		return g.learnedWords
+	}
+	return g.learnedWords[:g.process+1]
 }
 
 func NewGroup(groupName string) (*Group, error) {
