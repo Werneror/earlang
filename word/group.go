@@ -14,8 +14,12 @@ import (
 )
 
 type Word struct {
-	English string
-	Chinese string
+	English string `json:"english"`
+	Chinese string `json:"chinese,omitempty"`
+}
+
+func (w Word) Key() string {
+	return fmt.Sprintf("%s,%s", w.English, w.Chinese)
 }
 
 type Group struct {

@@ -11,6 +11,7 @@ import (
 
 var BaseDir string
 var WordDir string
+var PictureDir string
 
 var LogLevel = "warning"
 var LogFile = "earlang.log"
@@ -43,6 +44,8 @@ var WordChineseShow = false
 var WordListFileExtension = ".txt"
 var WordLearnedFileExtension = ".ld"
 var WordProcessFileExtension = ".proc"
+var WordExamineFile = "examine.json"
+var WordExamineOptionsCount = 4
 
 var FyneFont string
 var FyneScale = 1.2
@@ -67,6 +70,12 @@ func init() {
 		_ = os.MkdirAll(WordDir, os.ModePerm)
 	}
 	logrus.Debugf("word directory is %s", WordDir)
+
+	PictureDir = filepath.Join(BaseDir, "picture")
+	if _, err := os.Stat(PictureDir); os.IsNotExist(err) {
+		_ = os.MkdirAll(PictureDir, os.ModePerm)
+	}
+	logrus.Debugf("picture directory is %s", PictureDir)
 
 	err := builtin.SaveToDisk(WordDir)
 	if err != nil {

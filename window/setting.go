@@ -67,14 +67,14 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 		// 不同单词组可能有重复的单词，这里进行去重
 		// 拼写相同、汉语意思不同的算两个单词
 		for _, w := range g.GetWords() {
-			key := fmt.Sprintf("%s,%s", w.English, w.Chinese)
+			key := w.Key()
 			if _, ok := allWords[key]; ok {
 				logrus.Infof("duplicate words found in group %s: %s", g.Name, key)
 			}
 			allWords[key] = true
 		}
 		for _, w := range g.GetRealLearnedWords() {
-			learnedWords[fmt.Sprintf("%s,%s", w.English, w.Chinese)] = true
+			learnedWords[w.Key()] = true
 		}
 		progress := g.GetProcess()
 		if g.ProcessFileExist() {

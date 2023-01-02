@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path"
+	"path/filepath"
 
 	"github.com/werneror/earlang/common"
 	"github.com/werneror/earlang/config"
@@ -16,7 +16,6 @@ type PicPicker interface {
 	WordPictures(word string, number int) ([]string, error)
 }
 
-var picBaseDir = path.Join(config.BaseDir, "picture")
 var allPickers = []PicPicker{&BingImageSearch{}}
 var picker PicPicker
 
@@ -31,14 +30,14 @@ func init() {
 	if !found {
 		log.Fatalf("invalid picture picker id %s", config.PicPicker)
 	}
-	err := os.MkdirAll(path.Join(picBaseDir, config.PicPicker), os.ModePerm)
+	err := os.MkdirAll(filepath.Join(config.PictureDir, config.PicPicker), os.ModePerm)
 	if err != nil {
 		log.Fatalf("failed to mkdir %v", err)
 	}
 }
 
 func WordPictures(word string, number int) ([]string, error) {
-	picDirPath := path.Join(picBaseDir, config.PicPicker, word)
+	picDirPath := filepath.Join(config.PictureDir, config.PicPicker, word)
 
 	dir, err := os.ReadDir(picDirPath)
 	if err == nil {
@@ -47,7 +46,7 @@ func WordPictures(word string, number int) ([]string, error) {
 			if f.IsDir() {
 				continue
 			}
-			paths = append(paths, path.Join(picDirPath, f.Name()))
+			paths = append(paths, filepath.Join(picDirPath, f.Name()))
 		}
 		if len(paths) >= number {
 			return paths[:number], nil
@@ -66,7 +65,7 @@ func WordPictures(word string, number int) ([]string, error) {
 
 	paths := make([]string, 0, number)
 	for i, url := range urls {
-		localPath := path.Join(picDirPath, fmt.Sprintf("%d.jpg", i))
+		localPath := filepath.Join(picDirPath, fmt.Sprintf("%d.jpg", i))
 		err = common.Download(url, localPath)
 		if err != nil {
 			return nil, err

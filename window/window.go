@@ -15,6 +15,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 	"github.com/werneror/earlang/config"
 	"github.com/werneror/earlang/picture"
@@ -115,7 +116,7 @@ func (m *MainWindow) autoReadWord() {
 			if w != "" {
 				err := pronunciation.ReadOneWord(w)
 				if err != nil {
-					dialog.ShowError(fmt.Errorf("failed to read word %s: %v", m.getWord(), err), m.window)
+					m.showError(errors.Wrapf(err, "failed to read word %s", m.getWord()))
 				}
 			}
 		}
@@ -318,6 +319,18 @@ func NewMainWindow(app fyne.App) *MainWindow {
 			mainWindow.reset()
 		}),
 		widget.NewToolbarSeparator(),
+		widget.NewToolbarAction(theme.CheckButtonCheckedIcon(), func() {
+			ew, err := newExamineWindow(app)
+			if err != nil {
+				mainWindow.showError(err)
+				return
+			}
+			if config.WordReadMode == config.WordReadModeAuto && mainWindow.autoReadPause == false {
+				mainWindow.autoReadPause = true
+				mainWindow.updateReadButtonIcon()
+			}
+			ew.Show()
+		}),
 		widget.NewToolbarAction(theme.FolderOpenIcon(), func() {
 			var command string
 			if runtime.GOOS == "windows" {

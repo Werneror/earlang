@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
+	"time"
 
 	"fyne.io/fyne/v2/app"
 	"github.com/flopp/go-findfont"
@@ -19,6 +21,8 @@ func main() {
 }
 
 func init() {
+	rand.Seed(time.Now().Unix())
+
 	if os.Getenv("FYNE_SCALE") == "" && config.FyneScale != 0 {
 		err := os.Setenv("FYNE_SCALE", fmt.Sprintf("%f", config.FyneScale))
 		if err != nil {
@@ -51,6 +55,6 @@ func init() {
 	if err != nil {
 		logrus.Errorf("failed to set env FYNE_FONT to %s: %v", fontPath, err)
 	} else {
-		logrus.Debug("set the value of env FYNE_FONT to %s", fontPath)
+		logrus.Debugf("set the value of env FYNE_FONT to %s", fontPath)
 	}
 }

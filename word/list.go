@@ -2,7 +2,6 @@ package word
 
 import (
 	"math/rand"
-	"time"
 
 	"github.com/werneror/earlang/config"
 )
@@ -94,8 +93,4 @@ func NewList(groupName string) (*List, error) {
 		group: g,
 	}
 	return l, nil
-}
-
-func init() {
-	rand.Seed(time.Now().Unix())
 }
