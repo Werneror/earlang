@@ -81,10 +81,6 @@ func (g *Group) GetWordsCount() int {
 	return len(g.Words)
 }
 
-func (g *Group) GetCurrentWord() Word {
-	return g.Words[g.process]
-}
-
 func (g *Group) LoadWordsFromFile() error {
 	words, err := loadWordsFromFile(g.wordsFilePath)
 	if err != nil {
@@ -108,6 +104,10 @@ func (g *Group) GetLearnedWords() []Word {
 
 func (g *Group) GetLearnedWordsCount() int {
 	return len(g.learnedWords)
+}
+
+func (g *Group) GetCurrentWord() Word {
+	return g.learnedWords[g.process]
 }
 
 func (g *Group) AddLearnedWord(w Word) {
