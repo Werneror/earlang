@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	"sync"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -14,6 +15,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
+	"github.com/werneror/earlang/common"
 	"github.com/werneror/earlang/config"
 	"github.com/werneror/earlang/examine"
 	"github.com/werneror/earlang/pronunciation"
@@ -30,6 +32,7 @@ type examineWindow struct {
 	examineData          *examine.Data
 	processBar           *widget.ProgressBar
 	closed               bool
+	soundLock            sync.Mutex
 }
 
 func (e *examineWindow) showError(err error) {
@@ -59,14 +62,39 @@ func (e *examineWindow) updateProcessBar() {
 
 func (e *examineWindow) selectOption(i int) {
 	logrus.Debugf("examine select option %d", i)
-	// TODO: 正确或错误应该有更明显的提示
+	wrong := false
 	if i == e.currentCorrectOption {
 		e.examineData.Correct(e.currentWordIndex)
 	} else {
+		wrong = true
 		e.examineData.Wrong(e.currentWordIndex)
 	}
 	e.updateProcessBar()
 	e.nextWord()
+	if wrong {
+		e.playWrongTone()
+	}
+}
+
+func (e *examineWindow) playWrongTone() {
+	e.soundLock.Lock()
+	defer e.soundLock.Unlock()
+	err := common.PlayMP3(config.WrongTonePath)
+	if err != nil {
+		e.showError(errors.Wrapf(err, "failed to play wrong tone"))
+	}
+}
+
+func (e *examineWindow) readWord(word string) {
+	if word == "" {
+		return
+	}
+	e.soundLock.Lock()
+	defer e.soundLock.Unlock()
+	err := pronunciation.ReadOneWord(word)
+	if err != nil {
+		e.showError(errors.Wrapf(err, "failed to read word %s", word))
+	}
 }
 
 func (e *examineWindow) autoReadWord() {
@@ -74,12 +102,7 @@ func (e *examineWindow) autoReadWord() {
 		if e.closed {
 			break
 		}
-		if e.currentWord.English != "" {
-			err := pronunciation.ReadOneWord(e.currentWord.English)
-			if err != nil {
-				e.showError(errors.Wrapf(err, "failed to read word %s", e.currentWord.English))
-			}
-		}
+		e.readWord(e.currentWord.English)
 		if config.WordReadAutoInterval <= 0 {
 			logrus.Warnf("word.read_auto_interval is an invalid value %d", config.WordReadAutoInterval)
 			config.WordReadAutoInterval = 2

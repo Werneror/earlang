@@ -1,6 +1,7 @@
 package config
 
 import (
+	_ "embed"
 	"os"
 	"path/filepath"
 
@@ -9,9 +10,13 @@ import (
 	"github.com/werneror/earlang/word/builtin"
 )
 
+//go:embed resources/wrong_tone.wav
+var wrongToneWav []byte
+
 var BaseDir string
 var WordDir string
 var PictureDir string
+var WrongTonePath string
 
 var LogLevel = "warning"
 var LogFile = "earlang.log"
@@ -71,16 +76,25 @@ func init() {
 	}
 	logrus.Debugf("word directory is %s", WordDir)
 
+	err := builtin.SaveToDisk(WordDir)
+	if err != nil {
+		logrus.Errorf("failed to save built-in groups: %v", err)
+	}
+
 	PictureDir = filepath.Join(BaseDir, "picture")
 	if _, err := os.Stat(PictureDir); os.IsNotExist(err) {
 		_ = os.MkdirAll(PictureDir, os.ModePerm)
 	}
 	logrus.Debugf("picture directory is %s", PictureDir)
 
-	err := builtin.SaveToDisk(WordDir)
-	if err != nil {
-		logrus.Errorf("failed to save built-in groups: %v", err)
+	WrongTonePath = filepath.Join(BaseDir, "wrong_tone.wav")
+	if _, err := os.Stat(WrongTonePath); os.IsNotExist(err) {
+		err := os.WriteFile(WrongTonePath, wrongToneWav, os.ModePerm)
+		if err != nil {
+			logrus.Errorf("failed to save wront tone wav to %s: %v", WrongTonePath, err)
+		}
 	}
+	logrus.Debugf("wrong tone sound is is %s", WrongTonePath)
 
 	// configure
 	viper.SetConfigName("config")
