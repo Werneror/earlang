@@ -3,6 +3,7 @@ package window
 import (
 	"fmt"
 	"math/rand"
+	"strconv"
 	"time"
 
 	"fyne.io/fyne/v2"
@@ -153,6 +154,13 @@ func newExamineWindow(app fyne.App) (*examineWindow, error) {
 		}(i))
 	}
 	optionsGrid := container.New(layout.NewGridLayout(config.WordExamineOptionsCount), optionButtons...)
+
+	e.window.Canvas().SetOnTypedKey(func(event *fyne.KeyEvent) {
+		option, err := strconv.Atoi(string(event.Name))
+		if err == nil && option >= 1 && option <= config.WordExamineOptionsCount {
+			e.selectOption(option - 1)
+		}
+	})
 
 	e.processBar = widget.NewProgressBar()
 	e.processBar.TextFormatter = func() string {
