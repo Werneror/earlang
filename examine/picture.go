@@ -57,8 +57,12 @@ func SelectPicture(englishWord string, count int) (string, []string, error) {
 		knownWords[interfereWord] = true
 		interferePicPath, err := randomlySelectOne(interfereWordDir)
 		if err != nil {
-			return "", nil, errors.Wrapf(err, "failed to select interfere word %s picture for word %s piecture",
-				interfereWordDir, englishWord)
+			attempts += 1
+			if attempts > 5 {
+				return "", nil, errors.Wrapf(err, "failed to select interfere word %s picture for word %s piecture",
+					interfereWordDir, englishWord)
+			}
+			goto retry
 		}
 		interferePicPaths = append(interferePicPaths, interferePicPath)
 	}
