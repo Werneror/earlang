@@ -37,6 +37,10 @@ const (
 	WordReadModeAuto   = "auto"
 	WordReadModeOnce   = "once"
 	WordReadModeManual = "manual"
+
+	ExamineModeAll        = "all"
+	ExamineModeLearned    = "learned"
+	ExamineModeUnfamiliar = "unfamiliar"
 )
 
 var WordGroupName = builtin.Groups[0].Name
@@ -49,8 +53,10 @@ var WordChineseShow = false
 var WordListFileExtension = ".txt"
 var WordLearnedFileExtension = ".ld"
 var WordProcessFileExtension = ".proc"
-var WordExamineFile = "examine.json"
 var WordExamineOptionsCount = 4
+
+var ExamineMode = ExamineModeLearned
+var ExamineDataFile = "examine.json"
 
 var FyneFont string
 var FyneScale = 1.2
@@ -120,6 +126,8 @@ func init() {
 	viper.SetDefault("word.show_english", WordEnglishShow)
 	viper.SetDefault("word.show_chinese", WordChineseShow)
 
+	viper.SetDefault("word.examine_mode", ExamineMode)
+
 	viper.SetDefault("fyne.font", FyneFont)
 	viper.SetDefault("fyne.scale", FyneScale)
 
@@ -153,6 +161,8 @@ func init() {
 	WordReadAutoInterval = viper.GetInt("word.read_auto_interval")
 	WordEnglishShow = viper.GetBool("word.show_english")
 	WordChineseShow = viper.GetBool("word.show_chinese")
+
+	ExamineMode = viper.GetString("word.examine_mode")
 
 	FyneFont = viper.GetString("fyne.font")
 	FyneScale = viper.GetFloat64("fyne.scale")

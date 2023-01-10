@@ -2,6 +2,7 @@ package examine
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -10,7 +11,7 @@ import (
 	"github.com/werneror/earlang/word"
 )
 
-var examineDataFilePath = filepath.Join(config.BaseDir, config.WordExamineFile)
+var examineDataFilePath = filepath.Join(config.BaseDir, config.ExamineDataFile)
 
 type wordResult struct {
 	word.Word
@@ -89,14 +90,53 @@ func (d *Data) Wrong(i int) {
 	d.Words[i].WrongTimes += 1
 }
 
-func NewExamineData(learnedWords map[string]word.Word) (*Data, error) {
+func learnedWords() (map[string]word.Word, error) {
+	groups, err := word.AllGroups()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get all groups")
+	}
+	learnedWords := make(map[string]word.Word, 0)
+	for _, g := range groups {
+		for _, w := range g.GetRealLearnedWords() {
+			learnedWords[w.Key()] = w
+		}
+	}
+	return learnedWords, nil
+}
+
+func allWords() (map[string]word.Word, error) {
+	groups, err := word.AllGroups()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to get all groups")
+	}
+	allWords := make(map[string]word.Word, 0)
+	for _, g := range groups {
+		for _, w := range g.GetWords() {
+			allWords[w.Key()] = w
+		}
+	}
+	return allWords, nil
+}
+
+func NewExamineData() (*Data, error) {
 	r := &Data{}
 	err := r.LoadExamineDataFromFile()
 	if err != nil {
 		return nil, err
 	}
+
+	var words map[string]word.Word
+	switch config.ExamineMode {
+	case config.ExamineModeAll:
+		words, err = allWords()
+	case config.ExamineModeLearned:
+		words, err = learnedWords()
+	default:
+		return nil, fmt.Errorf("unsupport examine mode: %s", config.ExamineMode)
+	}
+
 	newWords := make([]word.Word, 0)
-	for key, lw := range learnedWords {
+	for key, lw := range words {
 		found := false
 		for _, rw := range r.Words {
 			if key == rw.Key() {

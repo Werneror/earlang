@@ -105,6 +105,9 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	showChineseCheck := widget.NewCheck("show Chinese translation below the pictures", func(bool) {})
 	showChineseCheck.SetChecked(config.WordChineseShow)
 
+	ExamineModeSelect := widget.NewSelect([]string{config.ExamineModeAll, config.ExamineModeLearned, config.ExamineModeUnfamiliar}, func(string) {})
+	ExamineModeSelect.SetSelected(config.ExamineMode)
+
 	form := &widget.Form{
 		Items: []*widget.FormItem{
 			{Text: "log level", Widget: logLevelSelect},
@@ -118,6 +121,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			{Text: "word select mode", Widget: wordSelectModeSelect},
 			{Text: "show word", Widget: showEnglishCheck},
 			{Text: "show Chinese", Widget: showChineseCheck},
+			{Text: "examine mode", Widget: ExamineModeSelect},
 		},
 		OnSubmit: func() {
 			needUpdateList := false
@@ -182,6 +186,9 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			}
 			config.WordChineseShow = showChineseCheck.Checked
 			viper.Set("word.show_chinese", config.WordChineseShow)
+
+			config.ExamineMode = ExamineModeSelect.Selected
+			viper.Set("word.examine_mode", config.ExamineMode)
 
 			if err := viper.WriteConfig(); err != nil {
 				logrus.Errorf("failed to update config file: %v", err)

@@ -142,22 +142,13 @@ func newExamineWindow(app fyne.App) (*examineWindow, error) {
 	}
 	e.window.SetIcon(resource.EarIcoe)
 
-	groups, err := word.AllGroups()
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to get all groups")
-	}
-	learnedWords := make(map[string]word.Word, 0)
-	for _, g := range groups {
-		for _, w := range g.GetRealLearnedWords() {
-			learnedWords[w.Key()] = w
-		}
-	}
-	e.examineData, err = examine.NewExamineData(learnedWords)
+	var err error
+	e.examineData, err = examine.NewExamineData()
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create examine data")
 	}
 	if len(e.examineData.Words) < 5 {
-		return nil, errors.New("there are too few words learned to take the examine")
+		return nil, errors.New("there are too few words to take the examine")
 	}
 
 	e.window.SetOnClosed(func() {
