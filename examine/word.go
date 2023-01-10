@@ -8,6 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/werneror/earlang/config"
+	"github.com/werneror/earlang/unfamiliar"
 	"github.com/werneror/earlang/word"
 )
 
@@ -118,7 +119,15 @@ func allWords() (map[string]word.Word, error) {
 	return allWords, nil
 }
 
-func NewExamineData() (*Data, error) {
+func unfamiliarWords(u *unfamiliar.Unfamiliar) (map[string]word.Word, error) {
+	words := make(map[string]word.Word, 0)
+	for _, w := range u.AllWords() {
+		words[w.Key()] = w
+	}
+	return words, nil
+}
+
+func NewExamineData(u *unfamiliar.Unfamiliar) (*Data, error) {
 	r := &Data{}
 	err := r.LoadExamineDataFromFile()
 	if err != nil {
@@ -131,6 +140,8 @@ func NewExamineData() (*Data, error) {
 		words, err = allWords()
 	case config.ExamineModeLearned:
 		words, err = learnedWords()
+	case config.ExamineModeUnfamiliar:
+		words, err = unfamiliarWords(u)
 	default:
 		return nil, fmt.Errorf("unsupport examine mode: %s", config.ExamineMode)
 	}

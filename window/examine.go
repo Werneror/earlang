@@ -20,6 +20,7 @@ import (
 	"github.com/werneror/earlang/examine"
 	"github.com/werneror/earlang/pronunciation"
 	"github.com/werneror/earlang/resource"
+	"github.com/werneror/earlang/unfamiliar"
 	"github.com/werneror/earlang/word"
 )
 
@@ -135,7 +136,7 @@ func (e *examineWindow) Show() {
 	e.window.Show()
 }
 
-func newExamineWindow(app fyne.App) (*examineWindow, error) {
+func newExamineWindow(app fyne.App, u *unfamiliar.Unfamiliar) (*examineWindow, error) {
 	e := &examineWindow{
 		window:     app.NewWindow("EarLang Examine"),
 		imagesGrid: container.New(layout.NewGridLayout(config.WordExamineOptionsCount)),
@@ -143,7 +144,7 @@ func newExamineWindow(app fyne.App) (*examineWindow, error) {
 	e.window.SetIcon(resource.EarIcoe)
 
 	var err error
-	e.examineData, err = examine.NewExamineData()
+	e.examineData, err = examine.NewExamineData(u)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create examine data")
 	}

@@ -58,6 +58,8 @@ var WordExamineOptionsCount = 4
 var ExamineMode = ExamineModeLearned
 var ExamineDataFile = "examine.json"
 
+var UnfamiliarDataFile = "unfamiliar.json"
+
 var FyneFont string
 var FyneScale = 1.2
 

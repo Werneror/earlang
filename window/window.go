@@ -21,6 +21,7 @@ import (
 	"github.com/werneror/earlang/picture"
 	"github.com/werneror/earlang/pronunciation"
 	"github.com/werneror/earlang/resource"
+	"github.com/werneror/earlang/unfamiliar"
 	"github.com/werneror/earlang/word"
 )
 
@@ -28,6 +29,7 @@ type MainWindow struct {
 	window        fyne.Window
 	imagesGrid    *fyne.Container
 	list          *word.List
+	word          word.Word
 	english       binding.String
 	englishWidget fyne.Widget
 	chinese       binding.String
@@ -38,6 +40,7 @@ type MainWindow struct {
 	readButton    *widget.Button
 	processBar    *widget.ProgressBar
 	autoReadPause bool
+	unfamiliar    *unfamiliar.Unfamiliar
 }
 
 func (m *MainWindow) showError(err error) {
@@ -58,6 +61,7 @@ func (m *MainWindow) getWord() string {
 func (m *MainWindow) setWord(w word.Word) {
 	m.wordLock.Lock()
 	m.wordLock.Unlock()
+	m.word = w
 	err := m.english.Set(w.English)
 	if err != nil {
 		m.showError(err)
@@ -263,6 +267,10 @@ func (m *MainWindow) UpdateList() error {
 	return nil
 }
 
+func (m *MainWindow) addWordToUnfamiliar() {
+	m.unfamiliar.Add(m.word)
+}
+
 func (m *MainWindow) ShowAndRun() {
 	m.window.RequestFocus()
 	m.window.CenterOnScreen()
@@ -288,8 +296,14 @@ func NewMainWindow(app fyne.App) *MainWindow {
 	prevButton := widget.NewButtonWithIcon("", theme.NavigateBackIcon(), func() {
 		mainWindow.prev()
 	})
+	copyButton := widget.NewButtonWithIcon("", theme.ContentCopyIcon(), func() {
+		mainWindow.window.Clipboard().SetContent(mainWindow.getWord())
+	})
 	mainWindow.readButton = widget.NewButtonWithIcon("", theme.VolumeUpIcon(), func() {
 		mainWindow.read()
+	})
+	unfamiliarButton := widget.NewButtonWithIcon("", theme.ContentAddIcon(), func() {
+		mainWindow.addWordToUnfamiliar()
 	})
 	nextButton := widget.NewButtonWithIcon("", theme.NavigateNextIcon(), func() {
 		mainWindow.next()
@@ -309,7 +323,7 @@ func NewMainWindow(app fyne.App) *MainWindow {
 
 	mainWindow.bottomBox = container.New(layout.NewVBoxLayout(),
 		container.New(layout.NewCenterLayout(), wordBox),
-		container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(3), prevButton, mainWindow.readButton, nextButton)),
+		container.New(layout.NewCenterLayout(), container.New(layout.NewGridLayout(5), prevButton, copyButton, mainWindow.readButton, unfamiliarButton, nextButton)),
 		mainWindow.processBar,
 	)
 
@@ -319,8 +333,11 @@ func NewMainWindow(app fyne.App) *MainWindow {
 			mainWindow.reset()
 		}),
 		widget.NewToolbarSeparator(),
+		widget.NewToolbarAction(theme.ContentPasteIcon(), func() {
+			// TODO
+		}),
 		widget.NewToolbarAction(theme.CheckButtonCheckedIcon(), func() {
-			ew, err := newExamineWindow(app)
+			ew, err := newExamineWindow(app, mainWindow.unfamiliar)
 			if err != nil {
 				mainWindow.showError(err)
 				return
@@ -360,12 +377,8 @@ func NewMainWindow(app fyne.App) *MainWindow {
 		switch event.Name {
 		case "Left", "A":
 			mainWindow.prev()
-		case "Up", "W":
-			mainWindow.window.Clipboard().SetContent(mainWindow.getWord())
 		case "Right", "D":
 			mainWindow.next()
-		case "Down", "S":
-			mainWindow.read()
 		case "E":
 			mainWindow.tempShowEnglish()
 		case "C":
@@ -374,6 +387,13 @@ func NewMainWindow(app fyne.App) *MainWindow {
 			mainWindow.reset()
 		}
 	})
+
+	u, err := unfamiliar.NewUnfamiliar()
+	if err != nil {
+		mainWindow.showError(err)
+		goto Finish
+	}
+	mainWindow.unfamiliar = u
 
 	if err := mainWindow.UpdateList(); err != nil {
 		mainWindow.showError(err)
