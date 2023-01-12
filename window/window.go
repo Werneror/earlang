@@ -334,7 +334,7 @@ func NewMainWindow(app fyne.App) *MainWindow {
 		}),
 		widget.NewToolbarSeparator(),
 		widget.NewToolbarAction(theme.ContentPasteIcon(), func() {
-			// TODO
+			newUnfamiliarWindow(app, mainWindow.unfamiliar).Show()
 		}),
 		widget.NewToolbarAction(theme.CheckButtonCheckedIcon(), func() {
 			ew, err := newExamineWindow(app, mainWindow.unfamiliar)

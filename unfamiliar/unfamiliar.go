@@ -62,6 +62,17 @@ func (u *Unfamiliar) Add(newWord word.Word) {
 	}
 }
 
+func (u *Unfamiliar) Set(words []word.Word) error {
+	oldWords := u.Words
+	u.Words = words
+	err := u.SaveDataToFile()
+	if err != nil {
+		u.Words = oldWords
+		return errors.Wrapf(err, "failed to update unfamiliar words")
+	}
+	return nil
+}
+
 func NewUnfamiliar() (*Unfamiliar, error) {
 	u := &Unfamiliar{}
 	err := u.LoadFromFile()
