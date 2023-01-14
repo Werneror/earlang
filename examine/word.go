@@ -127,6 +127,16 @@ func unfamiliarWords(u *unfamiliar.Unfamiliar) (map[string]word.Word, error) {
 	return words, nil
 }
 
+func frequentlyWrong(e *Data) (map[string]word.Word, error) {
+	words := make(map[string]word.Word, 0)
+	for _, w := range e.Words {
+		if w.WrongTimes > w.CorrectTimes {
+			words[w.Key()] = w.Word
+		}
+	}
+	return words, nil
+}
+
 func NewExamineData(u *unfamiliar.Unfamiliar) (*Data, error) {
 	r := &Data{}
 	err := r.LoadExamineDataFromFile()
@@ -142,6 +152,8 @@ func NewExamineData(u *unfamiliar.Unfamiliar) (*Data, error) {
 		words, err = learnedWords()
 	case config.ExamineModeUnfamiliar:
 		words, err = unfamiliarWords(u)
+	case config.ExamineModeFrequentlyWrong:
+		words, err = frequentlyWrong(r)
 	default:
 		return nil, fmt.Errorf("unsupport examine mode: %s", config.ExamineMode)
 	}

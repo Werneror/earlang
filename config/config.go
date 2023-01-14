@@ -38,9 +38,10 @@ const (
 	WordReadModeOnce   = "once"
 	WordReadModeManual = "manual"
 
-	ExamineModeAll        = "all"
-	ExamineModeLearned    = "learned"
-	ExamineModeUnfamiliar = "unfamiliar"
+	ExamineModeAll             = "all"
+	ExamineModeLearned         = "learned"
+	ExamineModeUnfamiliar      = "unfamiliar"
+	ExamineModeFrequentlyWrong = "frequently wrong"
 )
 
 var WordGroupName = builtin.Groups[0].Name

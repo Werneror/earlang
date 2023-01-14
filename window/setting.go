@@ -105,7 +105,9 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	showChineseCheck := widget.NewCheck("show Chinese translation below the pictures", func(bool) {})
 	showChineseCheck.SetChecked(config.WordChineseShow)
 
-	ExamineModeSelect := widget.NewSelect([]string{config.ExamineModeAll, config.ExamineModeLearned, config.ExamineModeUnfamiliar}, func(string) {})
+	ExamineModeSelect := widget.NewSelect([]string{
+		config.ExamineModeAll, config.ExamineModeLearned, config.ExamineModeUnfamiliar, config.ExamineModeFrequentlyWrong,
+	}, func(string) {})
 	ExamineModeSelect.SetSelected(config.ExamineMode)
 
 	form := &widget.Form{
