@@ -24,7 +24,7 @@
 
 主页面如下图所示：
 
-![MainWindow](https://user-images.githubusercontent.com/16622293/204133283-747ab126-8500-49ba-8e16-47509f2918bc.png)
+![MainWindow](https://user-images.githubusercontent.com/16622293/212705486-bbede8a4-abc9-4c1a-a449-8b6aa2ff3f26.png)
 
 主页面默认展示 10 张同一英语单词的图片，默认每隔 2 秒播放一次该单词读音。
 
@@ -60,7 +60,7 @@
 
 不熟悉单词表页面如下图所示：
 
-![UnfamiliarWordsWindow](https://)
+![UnfamiliarWordsWindow](https://user-images.githubusercontent.com/16622293/212705778-57b4ab4a-0dad-4c76-8846-7a18d34838fd.png)
 
 该页面显示所有添加到了不熟悉单词表中的单词。可进行编辑。也可全选、复制、粘贴到文件制作成自定义单词组，详情见后文。
 
@@ -68,7 +68,7 @@
 
 测验页面如下图所示：
 
-![ExamineWindow](https://)
+![ExamineWindow](https://user-images.githubusercontent.com/16622293/212705898-d97cb923-2b8d-4233-850f-60609e0dd9ef.png)
 
 测验页面每次展示 4 张图片，默认每隔 2 秒朗读一次英语单词读音。使用者需从 4 张图片中挑选出单词对应的图片。
 若选择正确，下部进度条进度将加 1；若选择错误，将播放错误提示音，重新选择 4 张图片和待测试单词，下部进度条进度不变。
@@ -82,7 +82,7 @@
 
 设置页面如下图所示：
 
-![SettingWindow](https://user-images.githubusercontent.com/16622293/204133317-9c80dc05-62bf-48d2-8ab6-f0d12306607f.png)
+![SettingWindow](https://user-images.githubusercontent.com/16622293/212705612-c1834928-9711-4bb5-85a2-e080c7046572.png)
 
 各设置项含义较为明确，此处不再赘述。
 
