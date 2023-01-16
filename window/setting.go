@@ -106,7 +106,8 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	showChineseCheck.SetChecked(config.WordChineseShow)
 
 	ExamineModeSelect := widget.NewSelect([]string{
-		config.ExamineModeAll, config.ExamineModeLearned, config.ExamineModeUnfamiliar, config.ExamineModeFrequentlyWrong,
+		config.ExamineModeAll, config.ExamineModeLearned, config.ExamineModeUnfamiliar,
+		config.ExamineModeFrequentlyWrong, config.ExamineModeCurrentGroup,
 	}, func(string) {})
 	ExamineModeSelect.SetSelected(config.ExamineMode)
 

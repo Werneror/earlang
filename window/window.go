@@ -337,7 +337,7 @@ func NewMainWindow(app fyne.App) *MainWindow {
 			newUnfamiliarWindow(app, mainWindow.unfamiliar).Show()
 		}),
 		widget.NewToolbarAction(theme.CheckButtonCheckedIcon(), func() {
-			ew, err := newExamineWindow(app, mainWindow.unfamiliar)
+			ew, err := newExamineWindow(app, mainWindow.unfamiliar, mainWindow.list)
 			if err != nil {
 				mainWindow.showError(err)
 				return

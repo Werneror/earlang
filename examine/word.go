@@ -127,7 +127,7 @@ func unfamiliarWords(u *unfamiliar.Unfamiliar) (map[string]word.Word, error) {
 	return words, nil
 }
 
-func frequentlyWrong(e *Data) (map[string]word.Word, error) {
+func frequentlyWrongWords(e *Data) (map[string]word.Word, error) {
 	words := make(map[string]word.Word, 0)
 	for _, w := range e.Words {
 		if w.WrongTimes > w.CorrectTimes {
@@ -137,7 +137,15 @@ func frequentlyWrong(e *Data) (map[string]word.Word, error) {
 	return words, nil
 }
 
-func NewExamineData(u *unfamiliar.Unfamiliar) (*Data, error) {
+func currentGroupWords(l *word.List) (map[string]word.Word, error) {
+	words := make(map[string]word.Word, 0)
+	for _, w := range l.AllWords() {
+		words[w.Key()] = w
+	}
+	return words, nil
+}
+
+func NewExamineData(u *unfamiliar.Unfamiliar, l *word.List) (*Data, error) {
 	r := &Data{}
 	err := r.LoadExamineDataFromFile()
 	if err != nil {
@@ -153,7 +161,9 @@ func NewExamineData(u *unfamiliar.Unfamiliar) (*Data, error) {
 	case config.ExamineModeUnfamiliar:
 		words, err = unfamiliarWords(u)
 	case config.ExamineModeFrequentlyWrong:
-		words, err = frequentlyWrong(r)
+		words, err = frequentlyWrongWords(r)
+	case config.ExamineModeCurrentGroup:
+		words, err = currentGroupWords(l)
 	default:
 		return nil, fmt.Errorf("unsupport examine mode: %s", config.ExamineMode)
 	}

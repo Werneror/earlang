@@ -42,6 +42,7 @@ const (
 	ExamineModeLearned         = "learned"
 	ExamineModeUnfamiliar      = "unfamiliar"
 	ExamineModeFrequentlyWrong = "frequently wrong"
+	ExamineModeCurrentGroup    = "current group"
 )
 
 var WordGroupName = builtin.Groups[0].Name
@@ -56,7 +57,7 @@ var WordLearnedFileExtension = ".ld"
 var WordProcessFileExtension = ".proc"
 var WordExamineOptionsCount = 4
 
-var ExamineMode = ExamineModeLearned
+var ExamineMode = ExamineModeCurrentGroup
 var ExamineDataFile = "examine.json"
 
 var UnfamiliarDataFile = "unfamiliar.json"

@@ -84,6 +84,10 @@ func (l *List) Progress() (int, int) {
 	return l.group.GetProcess() + 1, l.group.GetWordsCount()
 }
 
+func (l *List) AllWords() []Word {
+	return l.group.Words
+}
+
 func NewList(groupName string) (*List, error) {
 	g, err := NewGroup(groupName)
 	if err != nil {

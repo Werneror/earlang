@@ -136,7 +136,7 @@ func (e *examineWindow) Show() {
 	e.window.Show()
 }
 
-func newExamineWindow(app fyne.App, u *unfamiliar.Unfamiliar) (*examineWindow, error) {
+func newExamineWindow(app fyne.App, u *unfamiliar.Unfamiliar, l *word.List) (*examineWindow, error) {
 	e := &examineWindow{
 		window:     app.NewWindow("EarLang Examine"),
 		imagesGrid: container.New(layout.NewGridLayout(config.WordExamineOptionsCount)),
@@ -144,7 +144,7 @@ func newExamineWindow(app fyne.App, u *unfamiliar.Unfamiliar) (*examineWindow, e
 	e.window.SetIcon(resource.EarIcoe)
 
 	var err error
-	e.examineData, err = examine.NewExamineData(u)
+	e.examineData, err = examine.NewExamineData(u, l)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create examine data")
 	}
