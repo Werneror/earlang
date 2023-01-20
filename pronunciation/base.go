@@ -18,7 +18,7 @@ type PronPicker interface {
 }
 
 var pronBaseDir = path.Join(config.BaseDir, "pronunciation")
-var allPickers = []PronPicker{&CambridgeDictionary{}}
+var allPickers = []PronPicker{&CambridgeDictionary{}, &YouDaoDictionary{}}
 var picker PronPicker
 
 func init() {

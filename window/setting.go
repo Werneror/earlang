@@ -43,7 +43,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 	logLevelSelect := widget.NewSelect([]string{"debug", "info", "warning", "error"}, func(string) {})
 	logLevelSelect.SetSelected(config.LogLevel)
 
-	pronPickerSelect := widget.NewSelect([]string{"cambridge"}, func(string) {})
+	pronPickerSelect := widget.NewSelect([]string{"cambridge", "youdao"}, func(string) {})
 	pronPickerSelect.SetSelected(config.PronPicker)
 
 	pronRegionSelect := widget.NewSelect([]string{"us", "uk"}, func(string) {})
