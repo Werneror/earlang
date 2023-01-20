@@ -121,6 +121,8 @@ func (m *MainWindow) autoReadWord() {
 				err := pronunciation.ReadOneWord(w)
 				if err != nil {
 					m.showError(errors.Wrapf(err, "failed to read word %s", m.getWord()))
+					m.autoReadPause = true
+					m.updateReadButtonIcon()
 				}
 			}
 		}
