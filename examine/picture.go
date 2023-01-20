@@ -8,6 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/werneror/earlang/config"
+	"github.com/werneror/earlang/picture"
 )
 
 func randomlySelectOne(dir string) (string, error) {
@@ -33,7 +34,14 @@ func randomlySelectOne(dir string) (string, error) {
 // SelectPicture 会选取输入单词的 1 张图片，并随机选择其他 count 个单词的图片各 1 张
 func SelectPicture(englishWord string, count int) (string, []string, error) {
 	picDirPath := filepath.Join(config.PictureDir, config.PicPicker)
-	wordPicPath, err := randomlySelectOne(filepath.Join(picDirPath, englishWord))
+	picWordDirPath := filepath.Join(picDirPath, englishWord)
+	if _, err := os.Stat(picWordDirPath); os.IsNotExist(err) {
+		_, err := picture.WordPictures(englishWord, 1)
+		if err != nil {
+			return "", nil, err
+		}
+	}
+	wordPicPath, err := randomlySelectOne(picWordDirPath)
 	if err != nil {
 		return "", nil, errors.Wrapf(err, "failed to select %s piecture", englishWord)
 	}
