@@ -179,7 +179,7 @@ func init() {
 		logrus.SetLevel(level)
 	}
 	logFile := filepath.Join(BaseDir, LogFile)
-	f, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE, 0755)
+	f, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
 		logrus.Errorf("failed to open log file %s: %v", LogLevel, err)
 	} else {
