@@ -9,6 +9,8 @@ import (
 	"github.com/faiface/beep/speaker"
 )
 
+var initialized = false
+
 func PlayMP3(path string) error {
 	audioFile, err := os.Open(path)
 	if err != nil {
@@ -22,9 +24,12 @@ func PlayMP3(path string) error {
 	}
 	defer audioStreamer.Close()
 
-	err = speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
-	if err != nil {
-		return nil
+	if !initialized {
+		initialized = true
+		err = speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
+		if err != nil {
+			return nil
+		}
 	}
 
 	done := make(chan bool)
