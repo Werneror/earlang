@@ -118,7 +118,7 @@ func newSettingWindow(app fyne.App, mainWindow *MainWindow) *settingWindow {
 			{Text: "pronunciation region", Widget: pronRegionSelect},
 			{Text: "picture source", Widget: picPickerSelect},
 			{Text: "picture number", Widget: picNumberSelect},
-			{Text: "word group name", Widget: groupNameSelect, HintText: groupNameSelectHint},
+			{Text: "word group", Widget: groupNameSelect, HintText: groupNameSelectHint},
 			{Text: "word read mode", Widget: readModeSelect},
 			{Text: "word auto read interval(s)", Widget: readAutoIntervalSelect},
 			{Text: "word select mode", Widget: wordSelectModeSelect},
