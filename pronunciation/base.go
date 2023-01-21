@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 	"sync"
 
 	"github.com/werneror/earlang/common"
@@ -20,6 +21,7 @@ type PronPicker interface {
 var pronBaseDir = path.Join(config.BaseDir, "pronunciation")
 var allPickers = []PronPicker{&CambridgeDictionary{}, &YouDaoDictionary{}}
 var picker PronPicker
+var defaultPhrasePicker PronPicker = &YouDaoDictionary{}
 
 func init() {
 	found := false
@@ -39,15 +41,29 @@ func init() {
 }
 
 func WordPron(word string, region string) (string, error) {
-	audioFilePath := path.Join(pronBaseDir, config.PronPicker, fmt.Sprintf("%s_%s.mp3", region, word))
+	isPhrase := false
+	pickerID := config.PronPicker
+	if strings.Contains(word, " ") || strings.Contains(word, "'") {
+		pickerID = defaultPhrasePicker.ID()
+		isPhrase = true
+	}
+	audioFilePath := path.Join(pronBaseDir, pickerID, fmt.Sprintf("%s_%s.mp3", region, word))
 	_, err := os.Stat(audioFilePath)
 	if err == nil {
 		return audioFilePath, nil
 	}
 
-	url, err := picker.WordPron(word, region)
-	if err != nil {
-		return "", err
+	var url string
+	if isPhrase {
+		url, err = defaultPhrasePicker.WordPron(word, region)
+		if err != nil {
+			return "", err
+		}
+	} else {
+		url, err = picker.WordPron(word, region)
+		if err != nil {
+			return "", err
+		}
 	}
 
 	err = common.Download(url, audioFilePath)

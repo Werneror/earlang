@@ -12,7 +12,7 @@ var FoodsSimple = Group{
 		{English: "sausage", Chinese: "香肠"},
 		{English: "sandwich", Chinese: "三明治"},
 		{English: "dumplings", Chinese: "饺子"},
-		{English: "French fries", Chinese: "薯条"},
+		{English: "french fries", Chinese: "薯条"},
 		{English: "meat", Chinese: "肉"},
 		{English: "hamburger", Chinese: "汉堡"},
 		{English: "hot dog", Chinese: "热狗"},

@@ -84,7 +84,10 @@
 
 ![SettingWindow](https://user-images.githubusercontent.com/16622293/212705612-c1834928-9711-4bb5-85a2-e080c7046572.png)
 
-各设置项含义较为明确，此处不再赘述。
+大部分设置项含义较为明确，此处不再赘述。仅对重点设置项进行说明：
+
+- `pronunciation source`: 单词读音来源。默认是 `cambridge`，[剑桥词典](https://dictionary.cambridge.org/)
+  。剑桥词典不支持短语，遇到短语会自动使用[有道词典](https://www.youdao.com/)，也可设置为全部使用有道词典的读音。
 
 ## 常见问题
 
