@@ -1,6 +1,7 @@
 package builtin
 
 var Groups = []Group{
+	Appliance,
 	Animals,
 	Body,
 	Buildings,
@@ -8,10 +9,11 @@ var Groups = []Group{
 	Colours,
 	DailyNecessities,
 	Foods,
-	MusicalInstruments,
 	Fruits,
 	Furniture,
 	Locations,
+	Month,
+	MusicalInstruments,
 	Natures,
 	Plants,
 	Professions,
@@ -21,4 +23,5 @@ var Groups = []Group{
 	Toys,
 	Vegetables,
 	Vehicles,
+	Week,
 }

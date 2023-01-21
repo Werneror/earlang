@@ -12,5 +12,6 @@ var Tableware = Group{
 		{English: "chopsticks", Chinese: "筷子"},
 		{English: "saucer", Chinese: "茶托"},
 		{English: "napkin", Chinese: "餐巾"},
+		{English: "pot", Chinese: "锅"},
 	},
 }
