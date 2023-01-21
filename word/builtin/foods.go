@@ -1,7 +1,7 @@
 package builtin
 
-var FoodsSimple = Group{
-	Name: "foods(simple,builtin)",
+var Foods = Group{
+	Name: "foods(builtin)",
 	Words: []Word{
 		{English: "egg", Chinese: "鸡蛋"},
 		{English: "rice", Chinese: "米饭"},

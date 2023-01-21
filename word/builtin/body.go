@@ -1,7 +1,7 @@
 package builtin
 
-var BodySimple = Group{
-	Name: "body(simple,builtin)",
+var Body = Group{
+	Name: "body(builtin)",
 	Words: []Word{
 		{English: "foot", Chinese: "脚"},
 		{English: "head", Chinese: "头"},

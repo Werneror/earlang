@@ -1,7 +1,7 @@
 package builtin
 
-var NaturesSimple = Group{
-	Name: "nature(simple,builtin)",
+var Natures = Group{
+	Name: "nature(builtin)",
 	Words: []Word{
 		{English: "river", Chinese: "河流"},
 		{English: "lake", Chinese: "湖泊"},

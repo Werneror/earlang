@@ -1,7 +1,7 @@
 package builtin
 
-var ProfessionsSimple = Group{
-	Name: "professions(simple,builtin)",
+var Professions = Group{
+	Name: "professions(builtin)",
 	Words: []Word{
 		{English: "engineer", Chinese: "工程师"},
 		{English: "doctor", Chinese: "医生"},

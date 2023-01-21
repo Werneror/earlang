@@ -1,7 +1,7 @@
 package builtin
 
-var DailyNecessitiesSimple = Group{
-	Name: "daily necessities(simple,builtin)",
+var DailyNecessities = Group{
+	Name: "daily necessities(builtin)",
 	Words: []Word{
 		{English: "computer", Chinese: "计算机"},
 		{English: "board", Chinese: "板"},

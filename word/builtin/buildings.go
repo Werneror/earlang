@@ -1,7 +1,7 @@
 package builtin
 
-var BuildingsSimple = Group{
-	Name: "buildings(simple,builtin)",
+var Buildings = Group{
+	Name: "buildings(builtin)",
 	Words: []Word{
 		{English: "road", Chinese: "马路"},
 		{English: "path", Chinese: "小路"},

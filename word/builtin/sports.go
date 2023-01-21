@@ -1,7 +1,7 @@
 package builtin
 
-var SportsSimple = Group{
-	Name: "sports(simple,builtin)",
+var Sports = Group{
+	Name: "sports(builtin)",
 	Words: []Word{
 		{English: "boxing", Chinese: "拳击"},
 		{English: "golf", Chinese: "高尔夫"},

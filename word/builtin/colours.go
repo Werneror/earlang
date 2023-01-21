@@ -1,7 +1,7 @@
 package builtin
 
-var ColoursSimple = Group{
-	Name: "colours(simple,builtin)",
+var Colours = Group{
+	Name: "colours(builtin)",
 	Words: []Word{
 		{English: "red", Chinese: "红"},
 		{English: "blue", Chinese: "蓝"},

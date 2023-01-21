@@ -1,7 +1,7 @@
 package builtin
 
-var FurnitureSimple = Group{
-	Name: "furniture(simple,builtin)",
+var Furniture = Group{
+	Name: "furniture(builtin)",
 	Words: []Word{
 		{English: "sofa", Chinese: "沙发"},
 		{English: "shelf", Chinese: "架子"},

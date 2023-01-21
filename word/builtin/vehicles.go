@@ -1,7 +1,7 @@
 package builtin
 
-var VehiclesSimple = Group{
-	Name: "vehicles(simple,builtin)",
+var Vehicles = Group{
+	Name: "vehicles(builtin)",
 	Words: []Word{
 		{English: "bike", Chinese: "自行车"},
 		{English: "bus", Chinese: "公共汽车"},

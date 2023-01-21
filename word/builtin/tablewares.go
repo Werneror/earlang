@@ -1,7 +1,7 @@
 package builtin
 
-var TablewareSimple = Group{
-	Name: "tableware(simple,builtin)",
+var Tableware = Group{
+	Name: "tableware(builtin)",
 	Words: []Word{
 		{English: "plate", Chinese: "盘子"},
 		{English: "bowl", Chinese: "碗"},
