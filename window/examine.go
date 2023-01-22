@@ -120,7 +120,7 @@ func (e *examineWindow) nextWord() {
 		time.Sleep(time.Second * 3)
 		e.window.Close()
 	}
-	wordPicPath, interferePicPaths, err := examine.SelectPicture(e.currentWord.English, config.WordExamineOptionsCount-1)
+	wordPicPath, interferePicPaths, err := examine.SelectPicture(e.currentWord, config.WordExamineOptionsCount-1)
 	if err != nil {
 		e.showError(err)
 	}

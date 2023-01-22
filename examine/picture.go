@@ -9,6 +9,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/werneror/earlang/config"
 	"github.com/werneror/earlang/picture"
+	"github.com/werneror/earlang/word"
 )
 
 func randomlySelectOne(dir string) (string, error) {
@@ -32,33 +33,34 @@ func randomlySelectOne(dir string) (string, error) {
 }
 
 // SelectPicture 会选取输入单词的 1 张图片，并随机选择其他 count 个单词的图片各 1 张
-func SelectPicture(englishWord string, count int) (string, []string, error) {
+func SelectPicture(w word.Word, count int) (string, []string, error) {
+	query := w.GetQuery()
 	picDirPath := filepath.Join(config.PictureDir, config.PicPicker)
-	picWordDirPath := filepath.Join(picDirPath, englishWord)
+	picWordDirPath := filepath.Join(picDirPath, query)
 	if _, err := os.Stat(picWordDirPath); os.IsNotExist(err) {
-		_, err := picture.WordPictures(englishWord, 1)
+		_, err := picture.WordPictures(w, 1)
 		if err != nil {
 			return "", nil, err
 		}
 	}
 	wordPicPath, err := randomlySelectOne(picWordDirPath)
 	if err != nil {
-		return "", nil, errors.Wrapf(err, "failed to select %s piecture", englishWord)
+		return "", nil, errors.Wrapf(err, "failed to select %s(%s) piecture", w.Key(), query)
 	}
-	knownWords := map[string]bool{englishWord: true}
+	knownWords := map[string]bool{w.Query: true}
 	interferePicPaths := make([]string, 0)
 	for i := 0; i < count; i++ {
 		attempts := 0
 	retry:
 		interfereWordDir, err := randomlySelectOne(filepath.Join(picDirPath))
 		if err != nil {
-			return "", nil, errors.Wrapf(err, "failed to select interfere word for %s", englishWord)
+			return "", nil, errors.Wrapf(err, "failed to select interfere word for %s(%s)", w.Key(), query)
 		}
 		interfereWord := filepath.Base(interfereWordDir)
 		if _, ok := knownWords[interfereWord]; ok {
 			attempts += 1
 			if attempts > 5 {
-				return "", nil, fmt.Errorf("failed to select interfere word for %s", englishWord)
+				return "", nil, fmt.Errorf("failed to select interfere word for %s(%s)", w.Key(), query)
 			}
 			goto retry
 		}
@@ -68,7 +70,7 @@ func SelectPicture(englishWord string, count int) (string, []string, error) {
 			attempts += 1
 			if attempts > 5 {
 				return "", nil, errors.Wrapf(err, "failed to select interfere word %s picture for word %s piecture",
-					interfereWordDir, englishWord)
+					interfereWordDir, w.Key())
 			}
 			goto retry
 		}

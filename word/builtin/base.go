@@ -12,6 +12,8 @@ import (
 type Word struct {
 	English string
 	Chinese string
+	// 在搜索引擎搜索图片时搜索什么，如果 Query 为空则把 English 作为 query
+	Query string
 }
 
 type Group struct {
@@ -24,7 +26,7 @@ func SaveToDisk(dir string) error {
 		path := filepath.Join(dir, fmt.Sprintf("%s.txt", group.Name))
 		s := make([]string, 0, len(group.Words))
 		for _, w := range group.Words {
-			s = append(s, fmt.Sprintf("%s,%s", w.English, w.Chinese))
+			s = append(s, fmt.Sprintf("%s,%s,%s", w.English, w.Chinese, w.Query))
 		}
 		err := os.WriteFile(path, []byte(strings.Join(s, "\n")), os.ModePerm)
 		if err != nil {

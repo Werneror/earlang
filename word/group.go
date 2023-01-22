@@ -16,10 +16,19 @@ import (
 type Word struct {
 	English string `json:"english"`
 	Chinese string `json:"chinese,omitempty"`
+	// 在搜索引擎搜索图片时搜索什么，如果 Query 为空则把 English 作为 query
+	Query string `json:"query,omitempty"`
 }
 
 func (w Word) Key() string {
 	return fmt.Sprintf("%s,%s", w.English, w.Chinese)
+}
+
+func (w Word) GetQuery() string {
+	if w.Query == "" {
+		return w.English
+	}
+	return w.Query
 }
 
 type Group struct {
@@ -45,12 +54,15 @@ func loadWordsFromFile(filePath string) ([]Word, error) {
 		if w == "" {
 			continue
 		}
-		pieces := strings.SplitN(w, ",", 2)
+		pieces := strings.SplitN(w, ",", 3)
 		newWord := Word{
 			English: strings.TrimSpace(pieces[0]),
 		}
 		if len(pieces) > 1 {
 			newWord.Chinese = strings.TrimSpace(pieces[1])
+		}
+		if len(pieces) > 2 {
+			newWord.Query = strings.TrimSpace(pieces[2])
 		}
 		words = append(words, newWord)
 	}
@@ -60,7 +72,7 @@ func loadWordsFromFile(filePath string) ([]Word, error) {
 func saveWordsToFile(filePath string, words []Word) error {
 	s := make([]string, 0, len(words))
 	for _, w := range words {
-		s = append(s, fmt.Sprintf("%s,%s", w.English, w.Chinese))
+		s = append(s, fmt.Sprintf("%s,%s,%s", w.English, w.Chinese, w.Query))
 	}
 	err := os.WriteFile(filePath, []byte(strings.Join(s, "\n")), os.ModePerm)
 	if err != nil {

@@ -8,6 +8,7 @@ import (
 
 	"github.com/werneror/earlang/common"
 	"github.com/werneror/earlang/config"
+	"github.com/werneror/earlang/word"
 )
 
 type PicPicker interface {
@@ -36,8 +37,9 @@ func init() {
 	}
 }
 
-func WordPictures(word string, number int) ([]string, error) {
-	picDirPath := filepath.Join(config.PictureDir, config.PicPicker, word)
+func WordPictures(w word.Word, number int) ([]string, error) {
+	query := w.GetQuery()
+	picDirPath := filepath.Join(config.PictureDir, config.PicPicker, query)
 
 	dir, err := os.ReadDir(picDirPath)
 	if err == nil {
@@ -53,7 +55,7 @@ func WordPictures(word string, number int) ([]string, error) {
 		}
 	}
 
-	urls, err := picker.WordPictures(word, number+5)
+	urls, err := picker.WordPictures(query, number+5)
 	if err != nil {
 		return nil, err
 	}

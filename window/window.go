@@ -80,7 +80,7 @@ func (m *MainWindow) readWord() {
 }
 
 func (m *MainWindow) showImages() {
-	pics, err := picture.WordPictures(m.getWord(), config.PicTotalNumber)
+	pics, err := picture.WordPictures(m.word, config.PicTotalNumber)
 	if err != nil {
 		m.showError(fmt.Errorf("failed to download pictures for word %s: %v", m.getWord(), err))
 		return
@@ -108,7 +108,7 @@ func (m *MainWindow) preload() {
 		defer m.preloadLock.Unlock()
 		logrus.Debugf("start preload %s", newWord)
 		_, _ = pronunciation.WordPron(newWord.English, config.PronRegion)
-		_, _ = picture.WordPictures(newWord.English, config.PicTotalNumber)
+		_, _ = picture.WordPictures(newWord, config.PicTotalNumber)
 		logrus.Debugf("finish preload %s", newWord)
 	}
 }
