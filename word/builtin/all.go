@@ -8,6 +8,7 @@ var Groups = []Group{
 	Clothes,
 	Colours,
 	DailyNecessities,
+	Days,
 	Foods,
 	Fruits,
 	Furniture,
@@ -23,5 +24,5 @@ var Groups = []Group{
 	Toys,
 	Vegetables,
 	Vehicles,
-	Week,
+	Weather,
 }
