@@ -9,6 +9,7 @@ var Groups = []Group{
 	Colours,
 	DailyNecessities,
 	Days,
+	Farming,
 	Foods,
 	Fruits,
 	Furniture,
