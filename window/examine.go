@@ -80,7 +80,7 @@ func (e *examineWindow) selectOption(i int) {
 func (e *examineWindow) playWrongTone() {
 	e.soundLock.Lock()
 	defer e.soundLock.Unlock()
-	err := common.PlayMP3(config.WrongTonePath)
+	err := common.PlayAudio(config.WrongTonePath)
 	if err != nil {
 		e.showError(errors.Wrapf(err, "failed to play wrong tone"))
 	}

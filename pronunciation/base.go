@@ -84,5 +84,5 @@ func ReadOneWord(w string) error {
 	}
 	readLock.Lock()
 	defer readLock.Unlock()
-	return common.PlayMP3(audioPath)
+	return common.PlayAudio(audioPath)
 }

@@ -13,7 +13,7 @@ import (
 
 var initialized = false
 
-func PlayMP3(path string) error {
+func PlayAudio(path string) error {
 	audioFile, err := os.Open(path)
 	if err != nil {
 		return errors.Wrapf(err, "failed to open audio file %s", path)
