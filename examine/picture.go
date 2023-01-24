@@ -36,7 +36,7 @@ func randomlySelectOne(dir string) (string, error) {
 func SelectPicture(w word.Word, count int) (string, []string, error) {
 	query := w.GetQuery()
 	picDirPath := filepath.Join(config.PictureDir, config.PicPicker)
-	picWordDirPath := filepath.Join(picDirPath, query)
+	picWordDirPath := filepath.Join(picDirPath, w.Key())
 	if _, err := os.Stat(picWordDirPath); os.IsNotExist(err) {
 		_, err := picture.WordPictures(w, 1)
 		if err != nil {
@@ -47,7 +47,7 @@ func SelectPicture(w word.Word, count int) (string, []string, error) {
 	if err != nil {
 		return "", nil, errors.Wrapf(err, "failed to select %s(%s) piecture", w.Key(), query)
 	}
-	knownWords := map[string]bool{w.Query: true}
+	knownWords := map[string]bool{w.Key(): true}
 	interferePicPaths := make([]string, 0)
 	for i := 0; i < count; i++ {
 		attempts := 0

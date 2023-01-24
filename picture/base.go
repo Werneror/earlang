@@ -39,7 +39,7 @@ func init() {
 
 func WordPictures(w word.Word, number int) ([]string, error) {
 	query := w.GetQuery()
-	picDirPath := filepath.Join(config.PictureDir, config.PicPicker, query)
+	picDirPath := filepath.Join(config.PictureDir, config.PicPicker, w.Key())
 
 	dir, err := os.ReadDir(picDirPath)
 	if err == nil {

@@ -119,6 +119,7 @@ func (e *examineWindow) nextWord() {
 		dialog.ShowInformation("Congratulations!", "You have passed the examine.", e.window)
 		time.Sleep(time.Second * 3)
 		e.window.Close()
+		return
 	}
 	wordPicPath, interferePicPaths, err := examine.SelectPicture(e.currentWord, config.WordExamineOptionsCount-1)
 	if err != nil {
@@ -148,7 +149,8 @@ func newExamineWindow(app fyne.App, u *unfamiliar.Unfamiliar, l *word.List) (*ex
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create examine data")
 	}
-	if len(e.examineData.Words) < 5 {
+	_, count := e.examineData.Process()
+	if count < 1 {
 		return nil, errors.New("there are too few words to take the examine")
 	}
 
