@@ -11,9 +11,12 @@ var Buildings = Group{
 		{English: "stair", Chinese: "楼梯"},
 		{English: "window", Chinese: "窗户"},
 		{English: "door", Chinese: "门"},
+		{English: "gate", Chinese: "大门"},
 		{English: "wall", Chinese: "墙壁"},
 		{English: "floor", Chinese: "地板"},
 		{English: "ceiling", Chinese: "天花板"},
 		{English: "hole", Chinese: "洞"},
+		{English: "fence", Chinese: "栅栏"},
+		{English: "hedge", Chinese: "树篱"},
 	},
 }

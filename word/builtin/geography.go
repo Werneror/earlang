@@ -1,0 +1,31 @@
+package builtin
+
+var Geography = Group{
+	Name: "geography(builtin)",
+	Words: []Word{
+		{English: "canal", Chinese: "运河"},
+		{English: "dam", Chinese: "水坝", Query: "水坝"},
+		{English: "desert", Chinese: "沙漠"},
+		{English: "ditch", Chinese: "沟渠"},
+		{English: "forest", Chinese: "森林"},
+		{English: "glacier", Chinese: "冰川"},
+		{English: "hill", Chinese: "小山"},
+		{English: "lake", Chinese: "湖泊"},
+		{English: "meadow", Chinese: "草地"},
+		{English: "mine", Chinese: "矿，矿井"},
+		{English: "moon", Chinese: "月亮"},
+		{English: "mountain", Chinese: "大山"},
+		{English: "plain", Chinese: "平原"},
+		{English: "pond", Chinese: "池塘"},
+		{English: "reservoir", Chinese: "水库", Query: "水库"},
+		{English: "river", Chinese: "河流"},
+		{English: "sky", Chinese: "天空"},
+		{English: "stream", Chinese: "溪流"},
+		{English: "sun", Chinese: "太阳"},
+		{English: "swamp", Chinese: "沼泽地"},
+		{English: "valley", Chinese: "山谷", Query: "山谷"},
+		{English: "volcano", Chinese: "火山"},
+		{English: "waterfall", Chinese: "瀑布"},
+		{English: "well", Chinese: "井"},
+	},
+}

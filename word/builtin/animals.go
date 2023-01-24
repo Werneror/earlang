@@ -32,5 +32,6 @@ var Animals = Group{
 		{English: "goat", Chinese: "山羊"},
 		{English: "shark", Chinese: "鲨鱼"},
 		{English: "seal", Chinese: "海豹"},
+		{English: "nest", Chinese: "鸟窝"},
 	},
 }
