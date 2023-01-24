@@ -10,8 +10,8 @@ import (
 	"github.com/werneror/earlang/word/builtin"
 )
 
-//go:embed resources/wrong_tone.wav
-var wrongToneWav []byte
+//go:embed resources/wrong_tone.mp3
+var wrongTone []byte
 
 var BaseDir string
 var WordDir string
@@ -98,9 +98,9 @@ func init() {
 	}
 	logrus.Debugf("picture directory is %s", PictureDir)
 
-	WrongTonePath = filepath.Join(BaseDir, "wrong_tone.wav")
+	WrongTonePath = filepath.Join(BaseDir, "wrong_tone.mp3")
 	if _, err := os.Stat(WrongTonePath); os.IsNotExist(err) {
-		err := os.WriteFile(WrongTonePath, wrongToneWav, os.ModePerm)
+		err := os.WriteFile(WrongTonePath, wrongTone, os.ModePerm)
 		if err != nil {
 			logrus.Errorf("failed to save wront tone wav to %s: %v", WrongTonePath, err)
 		}
