@@ -17,6 +17,9 @@ func init() {
 		c := &ConflictWords{
 			Words: [][]string{
 				{"mountain", "hill", "lake", "valley"},
+				{"canal", "ditch"},
+				{"forest", "swamp", "path"},
+				{"stream", "river", "waterfall"},
 			},
 		}
 		err := c.SaveToFile()

@@ -17,7 +17,6 @@ var Geography = Group{
 		{English: "mountain", Chinese: "大山"},
 		{English: "plain", Chinese: "平原"},
 		{English: "pond", Chinese: "池塘"},
-		{English: "reservoir", Chinese: "水库", Query: "水库"},
 		{English: "river", Chinese: "河流"},
 		{English: "sky", Chinese: "天空"},
 		{English: "stream", Chinese: "溪流"},

@@ -387,6 +387,8 @@ func NewMainWindow(app fyne.App) *MainWindow {
 			mainWindow.tempShowChinese()
 		case "R":
 			mainWindow.reset()
+		case "X":
+			mainWindow.window.Clipboard().SetContent(mainWindow.getWord())
 		case "Space":
 			mainWindow.read()
 		}
