@@ -16,6 +16,7 @@ var Groups = []Group{
 	Month,
 	MusicalInstruments,
 	Natures,
+	PersonalSupplies,
 	Plants,
 	Professions,
 	SchoolThings,
