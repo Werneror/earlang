@@ -58,7 +58,8 @@ var WordProcessFileExtension = ".proc"
 var WordExamineOptionsCount = 4
 
 var ExamineMode = ExamineModeCurrentGroup
-var ExamineDataFile = "examine.json"
+var ExamineDataFile = "examine_data.json"
+var ExamineConflictWordsFile = "examine_conflict_words.json"
 
 var UnfamiliarDataFile = "unfamiliar.json"
 

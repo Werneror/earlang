@@ -5,12 +5,24 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/werneror/earlang/config"
 	"github.com/werneror/earlang/picture"
 	"github.com/werneror/earlang/word"
 )
+
+var conflictWords *ConflictWords
+
+func init() {
+	var err error
+	conflictWords, err = NewExamineConflictWords()
+	if err != nil {
+		logrus.Warnf("failed to load conflict words: %s", conflictWords)
+	}
+}
 
 func randomlySelectOne(dir string) (string, error) {
 	d, err := os.ReadDir(dir)
@@ -57,6 +69,15 @@ func SelectPicture(w word.Word, count int) (string, []string, error) {
 			return "", nil, errors.Wrapf(err, "failed to select interfere word for %s(%s)", w.Key(), query)
 		}
 		interfereWord := filepath.Base(interfereWordDir)
+		interfereEnglishWord := strings.SplitN(interfereWord, ",", 2)[0]
+		if conflictWords != nil &&
+			conflictWords.Conflict(w.English, interfereEnglishWord) {
+			attempts += 1
+			if attempts > 5 {
+				return "", nil, fmt.Errorf("no non-conflicting words found for %s(%s)", w.Key(), query)
+			}
+			goto retry
+		}
 		if _, ok := knownWords[interfereWord]; ok {
 			attempts += 1
 			if attempts > 5 {
