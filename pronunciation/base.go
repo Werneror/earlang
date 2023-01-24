@@ -43,7 +43,9 @@ func init() {
 func WordPron(word string, region string) (string, error) {
 	isPhrase := false
 	pickerID := config.PronPicker
-	if strings.Contains(word, " ") || strings.Contains(word, "'") {
+	if strings.Contains(word, " ") ||
+		strings.Contains(word, "'") ||
+		strings.Contains(word, "-") {
 		pickerID = defaultPhrasePicker.ID()
 		isPhrase = true
 	}
