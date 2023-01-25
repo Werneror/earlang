@@ -13,6 +13,7 @@ import (
 var examineConflictWordsFilePath = filepath.Join(config.BaseDir, config.ExamineConflictWordsFile)
 
 func init() {
+	// TODO: 如果用户也修改了这个文件，要如何保持用户的修改，又能更新数据
 	if _, err := os.Stat(examineConflictWordsFilePath); os.IsNotExist(err) {
 		c := &ConflictWords{
 			Words: [][]string{
