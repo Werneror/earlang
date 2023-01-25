@@ -13,5 +13,6 @@ var Farming = Group{
 		{English: "axe", Chinese: "斧"},
 		{English: "sickle", Chinese: "镰刀"},
 		{English: "mill", Chinese: "磨", Query: "石磨"},
+		{English: "whip", Chinese: "鞭子"},
 	},
 }

@@ -6,6 +6,7 @@ var Clothes = Group{
 		{English: "apron", Chinese: "围裙"},
 		{English: "belt", Chinese: "皮带"},
 		{English: "bikini", Chinese: "比基尼", Query: "三点式比基尼"},
+		{English: "blazer", Chinese: "西装外套"},
 		{English: "blouse", Chinese: "女士衬衫(带扣子、比较正式的衬衫)"},
 		{English: "boots", Chinese: "靴子"},
 		{English: "bow tie", Chinese: "蝴蝶领结"},
