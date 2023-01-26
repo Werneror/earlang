@@ -137,7 +137,7 @@ func init() {
 	viper.SetDefault("fyne.scale", FyneScale)
 
 	if err := viper.ReadInConfig(); err != nil {
-		logrus.Errorf("failed to read config: %v", err)
+		logrus.Infof("failed to read config: %v", err)
 		if err := viper.SafeWriteConfig(); err != nil {
 			logrus.Errorf("failed to write config: %v", err)
 		}
