@@ -34,6 +34,8 @@ func init() {
 				{"socks", "stockings", "tights"},
 				{"wellingtons", "boots"},
 				{"blazer", "suit"},
+				{"fish", "shark"},
+				{"hair", "head"},
 			},
 		}
 		err := c.SaveToFile()
