@@ -14,5 +14,7 @@ var Toys = Group{
 		{English: "darts", Chinese: "飞镖"},
 		{English: "poker", Chinese: "扑克牌"},
 		{English: "stilts", Chinese: "高跷"},
+		{English: "swing", Chinese: "秋千"},
+		{English: "trampoline", Chinese: "蹦床"},
 	},
 }

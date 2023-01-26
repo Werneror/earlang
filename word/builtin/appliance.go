@@ -3,6 +3,10 @@ package builtin
 var Appliance = Group{
 	Name: "appliance(builtin)",
 	Words: []Word{
+		{English: "kettle", Chinese: "水壶"},
+		{English: "oven", Chinese: "烤箱"},
+		{English: "stove", Chinese: "炉子"},
+		{English: "toaster", Chinese: "吐司机"},
 		{English: "computer", Chinese: "计算机"},
 		{English: "laptop", Chinese: "笔记本电脑"},
 		{English: "tablet", Chinese: "平板电脑"},
@@ -10,6 +14,7 @@ var Appliance = Group{
 		{English: "lamp", Chinese: "台灯"},
 		{English: "phone", Chinese: "电话"},
 		{English: "fridge", Chinese: "冰箱"},
+		{English: "freezer", Chinese: "冰柜"},
 		{English: "light", Chinese: "灯"},
 		{English: "radio", Chinese: "收音机"},
 		{English: "television", Chinese: "电视机"},
@@ -17,5 +22,6 @@ var Appliance = Group{
 		{English: "torch", Chinese: "手电筒", Query: "手电筒"},
 		{English: "plug", Chinese: "插头"},
 		{English: "socket", Chinese: "插座"},
+		{English: "stereo", Chinese: "立体声音响"},
 	},
 }

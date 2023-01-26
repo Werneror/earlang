@@ -36,6 +36,14 @@ func init() {
 				{"blazer", "suit"},
 				{"fish", "shark"},
 				{"hair", "head"},
+				{"Halloween", "pumpkin"},
+				{"island", "peninsula", "beach"},
+				{"drainpipe", "guttering"},
+				{"fridge", "freezer"},
+				{"crockery", "plate"},
+				{"crockery", "bowl"},
+				{"mattress", "cushion"},
+				{"duvet", "bed", "sheet"},
 			},
 		}
 		err := c.SaveToFile()

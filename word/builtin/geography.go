@@ -3,6 +3,12 @@ package builtin
 var Geography = Group{
 	Name: "geography(builtin)",
 	Words: []Word{
+		{English: "beach", Chinese: "沙滩"},
+		{English: "cliff", Chinese: "断崖"},
+		{English: "island", Chinese: "岛屿", Query: "岛屿"},
+		{English: "peninsula", Chinese: "半岛"},
+		{English: "pier", Chinese: "码头", Query: "码头"},
+		{English: "tsunami", Chinese: "海啸"},
 		{English: "canal", Chinese: "运河"},
 		{English: "dam", Chinese: "水坝", Query: "水坝"},
 		{English: "desert", Chinese: "沙漠"},

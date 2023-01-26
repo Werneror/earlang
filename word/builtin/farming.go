@@ -3,6 +3,8 @@ package builtin
 var Farming = Group{
 	Name: "farming(builtin)",
 	Words: []Word{
+		{English: "rake", Chinese: "耙子"},
+		{English: "trowel", Chinese: "泥铲"},
 		{English: "hay", Chinese: "干草"},
 		{English: "wheat", Chinese: "小麦"},
 		{English: "soybean", Chinese: "大豆，黄豆"},

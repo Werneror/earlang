@@ -3,6 +3,8 @@ package builtin
 var Furniture = Group{
 	Name: "furniture(builtin)",
 	Words: []Word{
+		{English: "blinds", Chinese: "百叶窗", Query: "百叶窗"},
+		{English: "clock", Chinese: "钟"},
 		{English: "sofa", Chinese: "沙发"},
 		{English: "shelf", Chinese: "架子"},
 		{English: "table", Chinese: "桌子"},

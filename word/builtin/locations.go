@@ -3,7 +3,7 @@ package builtin
 var Locations = Group{
 	Name: "locations(builtin)",
 	Words: []Word{
-		{English: "kitchen", Chinese: "厨房"},
+		{English: "orchard", Chinese: "果园"},
 		{English: "school", Chinese: "学校"},
 		{English: "park", Chinese: "公园"},
 		{English: "library", Chinese: "图书馆"},
