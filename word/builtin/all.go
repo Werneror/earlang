@@ -1,8 +1,8 @@
 package builtin
 
 var Groups = []Group{
-	Appliance,
 	Animals,
+	Appliance,
 	Body,
 	Buildings,
 	Clothes,
