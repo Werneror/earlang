@@ -30,13 +30,13 @@ func init() {
 			found = true
 			picker = p
 		}
+		err := os.MkdirAll(path.Join(pronBaseDir, p.ID()), os.ModePerm)
+		if err != nil {
+			log.Fatalf("failed to mkdir for %s: %v", p.ID(), err)
+		}
 	}
 	if !found {
 		log.Fatalf("invalid pronunciation picker id %s", config.PronPicker)
-	}
-	err := os.MkdirAll(path.Join(pronBaseDir, config.PronPicker), os.ModePerm)
-	if err != nil {
-		log.Fatalf("failed to mkdir %v", err)
 	}
 }
 
