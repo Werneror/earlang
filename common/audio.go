@@ -9,9 +9,17 @@ import (
 	"github.com/faiface/beep/speaker"
 	"github.com/faiface/beep/wav"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
-var initialized = false
+var sr = beep.SampleRate(48000)
+
+func init() {
+	err := speaker.Init(sr, sr.N(time.Second/2))
+	if err != nil {
+		logrus.Errorf("failed to init speaker: %v", err)
+	}
+}
 
 func PlayAudio(path string) error {
 	audioFile, err := os.Open(path)
@@ -29,16 +37,9 @@ func PlayAudio(path string) error {
 	}
 	defer audioStreamer.Close()
 
-	if !initialized {
-		initialized = true
-		err = speaker.Init(format.SampleRate, format.SampleRate.N(time.Second/10))
-		if err != nil {
-			return errors.Wrap(err, "failed to init speaker")
-		}
-	}
-
+	resampled := beep.Resample(4, format.SampleRate, sr, audioStreamer)
 	done := make(chan bool)
-	speaker.Play(beep.Seq(audioStreamer, beep.Callback(func() {
+	speaker.Play(beep.Seq(resampled, beep.Callback(func() {
 		done <- true
 	})))
 	<-done
