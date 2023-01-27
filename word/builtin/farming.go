@@ -8,6 +8,7 @@ var Farming = Group{
 		{English: "hay", Chinese: "干草"},
 		{English: "wheat", Chinese: "小麦"},
 		{English: "soybean", Chinese: "大豆，黄豆"},
+		{English: "cotton", Chinese: "棉花"},
 		{English: "irrigation", Chinese: "灌溉"},
 		{English: "plow", Chinese: "犁", Query: "木犁"},
 		{English: "hoe", Chinese: "锄"},

@@ -3,6 +3,7 @@ package builtin
 var Professions = Group{
 	Name: "professions(builtin)",
 	Words: []Word{
+		{English: "pilot", Chinese: "飞行员"},
 		{English: "engineer", Chinese: "工程师"},
 		{English: "doctor", Chinese: "医生"},
 		{English: "nurse", Chinese: "护士"},

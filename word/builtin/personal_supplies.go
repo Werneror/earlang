@@ -13,7 +13,6 @@ var PersonalSupplies = Group{
 		{English: "handkerchief", Chinese: "手帕"},
 		{English: "key", Chinese: "钥匙"},
 		{English: "lighter", Chinese: "打火机"},
-		{English: "lipstick", Chinese: "口红"},
 		{English: "necklace", Chinese: "项链"},
 		{English: "purse", Chinese: "女士钱包", Query: "女士钱包"},
 		{English: "ring", Chinese: "戒指"},

@@ -3,6 +3,7 @@ package builtin
 var Toys = Group{
 	Name: "toys(builtin)",
 	Words: []Word{
+		{English: "chess", Chinese: "国际象棋"},
 		{English: "doll", Chinese: "洋娃娃"},
 		{English: "ball", Chinese: "球"},
 		{English: "balloon", Chinese: "气球"},

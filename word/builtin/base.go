@@ -16,6 +16,10 @@ type Word struct {
 	Query string
 }
 
+func (w Word) Key() string {
+	return fmt.Sprintf("%s,%s", w.English, w.Chinese)
+}
+
 type Group struct {
 	Name  string
 	Words []Word

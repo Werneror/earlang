@@ -3,6 +3,8 @@ package builtin
 var MusicalInstruments = Group{
 	Name: "musical instruments(builtin)",
 	Words: []Word{
+		{English: "harmonica", Chinese: "口琴"},
+		{English: "xylophone", Chinese: "木琴"},
 		{English: "violin", Chinese: "小提琴"},
 		{English: "cello", Chinese: "大提琴"},
 		{English: "harp", Chinese: "竖琴"},

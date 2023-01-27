@@ -3,6 +3,16 @@ package builtin
 var Vehicles = Group{
 	Name: "vehicles(builtin)",
 	Words: []Word{
+		{English: "canoe", Chinese: "皮划艇"},
+		{English: "trolley", Chinese: "手推车"},
+		{English: "jet", Chinese: "喷气式飞机"},
+		{English: "wing", Chinese: "机翼", Query: "机翼"},
+		{English: "helicopter", Chinese: "直升飞机"},
+		{English: "propeller", Chinese: "螺旋桨"},
+		{English: "tractor", Chinese: "拖拉机"},
+		{English: "moped", Chinese: "轻型摩托车"},
+		{English: "scooter", Chinese: "电动车"},
+		{English: "caravan", Chinese: "旅行拖车"},
 		{English: "bike", Chinese: "自行车"},
 		{English: "bus", Chinese: "公共汽车"},
 		{English: "train", Chinese: "火车"},

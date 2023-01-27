@@ -1,0 +1,33 @@
+package builtin
+
+var Head = Group{
+	Name: "head(builtin)",
+	Words: []Word{
+		{English: "face", Chinese: "脸"},
+		{English: "beard", Chinese: "胡须"},
+		{English: "cheek", Chinese: "脸颊"},
+		{English: "chin", Chinese: "下巴"},
+		{English: "hair", Chinese: "头发"},
+		{English: "head", Chinese: "头"},
+		{English: "ear", Chinese: "耳朵"},
+		{English: "earlobe", Chinese: "耳垂"},
+		{English: "eye", Chinese: "眼睛"},
+		{English: "eyebrow", Chinese: "眉毛"},
+		{English: "eyelash", Chinese: "睫毛"},
+		{English: "eyelid", Chinese: "眼睑"},
+		{English: "forehead", Chinese: "额头"},
+		{English: "freckles", Chinese: "雀斑"},
+		{English: "jaw", Chinese: "下颌"},
+		{English: "lip", Chinese: "嘴唇"},
+		{English: "moustache", Chinese: "胡子"},
+		{English: "mouth", Chinese: "嘴巴"},
+		{English: "nose", Chinese: "鼻子"},
+		{English: "nostril", Chinese: "鼻孔"},
+		{English: "tongue", Chinese: "舌头"},
+		{English: "tooth", Chinese: "牙齿"},
+		{English: "cornea", Chinese: "角膜"},
+		{English: "eyeball", Chinese: "眼球"},
+		{English: "retina", Chinese: "视网膜"},
+		{English: "pupil", Chinese: "瞳孔"},
+	},
+}
