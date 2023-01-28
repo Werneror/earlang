@@ -3,6 +3,7 @@ package builtin
 var Buildings = Group{
 	Name: "buildings(builtin)",
 	Words: []Word{
+		{English: "nest", Chinese: "鸟窝"},
 		{English: "stage", Chinese: "舞台"},
 		{English: "skyscraper", Chinese: "摩天大楼"},
 		{English: "reception", Chinese: "接待处"},

@@ -3,6 +3,7 @@ package builtin
 var Clothes = Group{
 	Name: "clothes(builtin)",
 	Words: []Word{
+		{English: "cloak", Chinese: "斗篷"},
 		{English: "apron", Chinese: "围裙"},
 		{English: "belt", Chinese: "皮带"},
 		{English: "bikini", Chinese: "比基尼", Query: "三点式比基尼"},

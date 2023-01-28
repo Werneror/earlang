@@ -3,6 +3,9 @@ package builtin
 var LowerBody = Group{
 	Name: "lower body(builtin)",
 	Words: []Word{
+		{English: "hoof", Chinese: "蹄子"},
+		{English: "claw", Chinese: "鸟爪", Query: "鸟爪"},
+		{English: "paw", Chinese: "兽爪", Query: "野兽爪子"},
 		{English: "ankle", Chinese: "脚踝"},
 		{English: "bottom", Chinese: "屁股", Query: "屁股特写"},
 		{English: "calf", Chinese: "小腿肚", Query: "小腿肚"},

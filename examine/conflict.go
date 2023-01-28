@@ -60,6 +60,13 @@ func init() {
 				{"ankle", "foot", "calf", "foot"},
 				{"hand", "palm"},
 				{"mucus", "phlegm"},
+				{"mouse", "rat"},
+				{"claw", "paw"},
+				{"bull", "cow"},
+				{"beak", "bird"},
+				{"petal", "flower", "pollen"},
+				{"branch", "twig"},
+				{"pine", "cedar"},
 			},
 		}
 		err := c.SaveToFile()

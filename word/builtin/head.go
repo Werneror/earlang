@@ -3,6 +3,7 @@ package builtin
 var Head = Group{
 	Name: "head(builtin)",
 	Words: []Word{
+		{English: "beak", Chinese: "喙"},
 		{English: "face", Chinese: "脸"},
 		{English: "beard", Chinese: "胡须"},
 		{English: "cheek", Chinese: "脸颊"},
