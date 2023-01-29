@@ -12,7 +12,7 @@ import (
 	"github.com/werneror/earlang/word"
 )
 
-var examineDataFilePath = filepath.Join(config.BaseDir, config.ExamineDataFile)
+var examineDataFilePath = filepath.Join(config.ExamineDir, config.ExamineDataFile)
 
 type wordResult struct {
 	word.Word

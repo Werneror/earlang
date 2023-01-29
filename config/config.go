@@ -16,6 +16,7 @@ var wrongTone []byte
 var BaseDir string
 var WordDir string
 var PictureDir string
+var ExamineDir string
 var WrongTonePath string
 
 var LogLevel = "warning"
@@ -97,6 +98,12 @@ func init() {
 		_ = os.MkdirAll(PictureDir, os.ModePerm)
 	}
 	logrus.Debugf("picture directory is %s", PictureDir)
+
+	ExamineDir = filepath.Join(BaseDir, "examine")
+	if _, err := os.Stat(ExamineDir); os.IsNotExist(err) {
+		_ = os.MkdirAll(ExamineDir, os.ModePerm)
+	}
+	logrus.Debugf("examine directory is %s", ExamineDir)
 
 	WrongTonePath = filepath.Join(BaseDir, "wrong_tone.mp3")
 	if _, err := os.Stat(WrongTonePath); os.IsNotExist(err) {

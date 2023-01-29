@@ -11,7 +11,7 @@ import (
 	"github.com/werneror/earlang/config"
 )
 
-var examineConflictWordsFilePath = filepath.Join(config.BaseDir, config.ExamineConflictWordsFile)
+var examineConflictWordsFilePath = filepath.Join(config.ExamineDir, config.ExamineConflictWordsFile)
 var initConflictWords = [][]string{
 	{"mountain", "hill", "lake", "valley"},
 	{"canal", "ditch"},
