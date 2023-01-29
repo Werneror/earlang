@@ -59,7 +59,7 @@ var WordExamineOptionsCount = 4
 
 var ExamineMode = ExamineModeCurrentGroup
 var ExamineDataFile = "examine_data.json"
-var ExamineConflictWordsFile = "examine_conflict_words.json"
+var ExamineConflictWordsFile = "examine_conflict_words.txt"
 
 var UnfamiliarDataFile = "unfamiliar.json"
 
