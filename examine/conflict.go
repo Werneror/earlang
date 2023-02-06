@@ -63,6 +63,7 @@ var initConflictWords = [][]string{
 	{"petal", "flower", "pollen"},
 	{"branch", "twig"},
 	{"pine", "cedar"},
+	{"beast", "tiger", "lion"},
 }
 
 type ConflictWords struct {

@@ -1,6 +1,7 @@
 package builtin
 
 var Groups = []Group{
+	Amphibians,
 	Animals,
 	Appliance,
 	Buildings,
@@ -30,12 +31,15 @@ var Groups = []Group{
 	Locations,
 	LowerBody,
 	Mammals,
+	MarineOrganism,
 	Metals,
+	Molluscs,
 	Month,
 	MusicalInstruments,
 	PersonalSupplies,
 	Plants,
 	Professions,
+	Reptile,
 	Rooms,
 	SchoolThings,
 	Shapes,
