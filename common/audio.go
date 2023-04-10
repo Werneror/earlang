@@ -43,5 +43,9 @@ func PlayAudio(path string) error {
 		done <- true
 	})))
 	<-done
+
+	// 虽然上面有等待，但实际测试发现等待时间不够长，可能只是把数据交给声卡就返回了
+	// 所以这里再额外等待一段时间
+	time.Sleep(2 * sr.D(audioStreamer.Len()))
 	return nil
 }
