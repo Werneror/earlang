@@ -55,7 +55,7 @@ func WordPictures(w word.Word, number int) ([]string, error) {
 		}
 	}
 
-	urls, err := picker.WordPictures(query, number+5)
+	urls, err := picker.WordPictures(query, number)
 	if err != nil {
 		return nil, err
 	}
@@ -73,9 +73,6 @@ func WordPictures(w word.Word, number int) ([]string, error) {
 			return nil, err
 		}
 		paths = append(paths, localPath)
-		if len(paths) >= number {
-			break
-		}
 	}
 	return paths, nil
 }
