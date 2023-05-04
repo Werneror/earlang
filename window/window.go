@@ -118,9 +118,11 @@ func (m *MainWindow) autoReadWord() {
 		if config.WordReadMode == config.WordReadModeAuto && !m.autoReadPause {
 			w := m.getWord()
 			if w != "" {
+				m.wordLock.RLock() // 在这里加锁的目的是防止朗读单词时切换了显示的图片
 				err := pronunciation.ReadOneWord(w)
+				m.wordLock.RUnlock()
 				if err != nil {
-					m.showError(errors.Wrapf(err, "failed to read word %s", m.getWord()))
+					m.showError(errors.Wrapf(err, "failed to read word %s", w))
 					m.autoReadPause = true
 					m.updateReadButtonIcon()
 				}
