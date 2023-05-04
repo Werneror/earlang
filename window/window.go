@@ -99,7 +99,7 @@ func (m *MainWindow) showImages() {
 }
 
 func (m *MainWindow) preload() {
-	if !m.list.Verge() {
+	if m.list.Verge() {
 		return
 	}
 	exists, newWord := m.list.PickWord()
