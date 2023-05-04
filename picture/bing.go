@@ -22,9 +22,9 @@ func (b *BingImageSearch) Name() string {
 
 func (b *BingImageSearch) WordPictures(word string, number int) ([]string, error) {
 	pageNum := 0
+	count := number + 10 // 有时候搜索结果少于指定的搜索数量，多搜索几个
 	baseURL := "https://cn.bing.com/images/async?q=%s&first=%d&count=%d&relp=%d&tsc=ImageBasicHover&datsrc=I&layout=RowBased&mmasync=1"
-	// 有时候搜索结果少于指定的搜索数量，多搜索几个
-	body, err := common.ReqGET(fmt.Sprintf(baseURL, url.QueryEscape(word), pageNum*(number+5), number+5, number+5))
+	body, err := common.ReqGET(fmt.Sprintf(baseURL, url.QueryEscape(word), pageNum*count, count, count))
 	if err != nil {
 		return nil, fmt.Errorf("query bing images search for %s error: %w", word, err)
 	}
