@@ -13,6 +13,6 @@ var Colours = Group{
 		{English: "purple", Chinese: "紫"},
 		{English: "brown", Chinese: "棕"},
 		{English: "gray", Chinese: "灰"},
-		{English: "multicoloured", Chinese: "多彩"},
+		{English: "orange", Chinese: "橙", Query: "橙色"},
 	},
 }
